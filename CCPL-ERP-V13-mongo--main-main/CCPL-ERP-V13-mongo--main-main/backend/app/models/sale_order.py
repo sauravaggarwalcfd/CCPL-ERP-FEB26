@@ -1,9 +1,9 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
-from bson import ObjectId
+import uuid
 
 
 class OrderStatus(str, Enum):
@@ -25,7 +25,7 @@ class PaymentStatus(str, Enum):
 
 
 class SOItem(BaseModel):
-    id: str = Field(default_factory=lambda: str(ObjectId()))
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     product: dict  # {id, style_number, name}
     variant: dict  # {id, sku, color, size, barcode}
     quantity: int
@@ -44,8 +44,8 @@ class EmbeddedCustomer(BaseModel):
     gst_number: Optional[str] = None
 
 
-class SaleOrder(Document):
-    order_number: Indexed(str, unique=True)  # SO-2024-0001
+class SaleOrder(SheetDocument):
+    order_number: str  # SO-2024-0001
 
     customer: EmbeddedCustomer
     warehouse: dict  # {id, code, name}
@@ -78,6 +78,6 @@ class SaleOrder(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "sale_orders"
-        indexes = ["order_number", "customer.id", "status", [("order_date", -1)]]
+    class SheetSettings:
+        tab_name = "_sale_orders"
+        unique_fields = ["order_number"]

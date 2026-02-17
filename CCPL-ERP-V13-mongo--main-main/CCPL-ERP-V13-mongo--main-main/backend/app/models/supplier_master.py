@@ -3,13 +3,13 @@ Supplier Master Model
 Stores information about suppliers for raw materials
 """
 
-from beanie import Document
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 from datetime import datetime
 
 
-class SupplierMaster(Document):
+class SupplierMaster(SheetDocument):
     """Supplier Master collection model"""
 
     supplier_code: str = Field(..., unique=True, index=True)
@@ -30,15 +30,9 @@ class SupplierMaster(Document):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     deleted_at: Optional[datetime] = None
 
-    class Settings:
-        name = "supplier_master"
-        indexes = [
-            "supplier_code",
-            "supplier_name",
-            "supplier_type",
-            "city",
-            "is_active",
-        ]
+    class SheetSettings:
+        tab_name = "_supplier_master"
+        unique_fields = ["supplier_code"]
 
     class Config:
         json_schema_extra = {

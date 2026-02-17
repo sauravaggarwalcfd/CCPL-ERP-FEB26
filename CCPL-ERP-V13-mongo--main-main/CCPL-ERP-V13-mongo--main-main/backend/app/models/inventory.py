@@ -1,4 +1,4 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
@@ -29,7 +29,7 @@ class EmbeddedLocation(BaseModel):
     code: str
 
 
-class Inventory(Document):
+class Inventory(SheetDocument):
     product: EmbeddedProduct
     variant: EmbeddedVariant
     warehouse: EmbeddedWarehouse
@@ -49,10 +49,6 @@ class Inventory(Document):
     def available_quantity(self) -> int:
         return self.quantity - self.reserved_quantity
 
-    class Settings:
-        name = "inventory"
-        indexes = [
-            [("variant.sku", 1), ("warehouse.id", 1)],
-            "warehouse.id",
-            "variant.sku",
-        ]
+    class SheetSettings:
+        tab_name = "_inventory"
+        unique_fields = []

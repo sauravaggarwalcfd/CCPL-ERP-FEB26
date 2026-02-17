@@ -3,7 +3,7 @@ UOM (Unit of Measure) Master Model
 Manages UOM variants with grouping and conversion system
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from datetime import datetime
@@ -19,9 +19,9 @@ class UOMGroup(str, Enum):
     AREA = "AREA"
 
 
-class UOMMaster(Document):
+class UOMMaster(SheetDocument):
     """UOM Master Document"""
-    uom_code: Indexed(str, unique=True)
+    uom_code: str
     uom_name: str
     uom_group: str  # Changed from Enum to str
     group_name: str  # Display name
@@ -38,15 +38,9 @@ class UOMMaster(Document):
     last_modified_by: Optional[str] = None
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "uom_master"
-        indexes = [
-            "uom_code",
-            "uom_group",
-            "is_active",
-            "display_order",
-            "is_base_uom"
-        ]
+    class SheetSettings:
+        tab_name = "_uom_master"
+        unique_fields = ["uom_code"]
 
 
 # ==================== REQUEST SCHEMAS ====================

@@ -1,11 +1,11 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 
 
-class Permission(Document):
-    code: Indexed(str, unique=True)  # e.g., 'products.create'
+class Permission(SheetDocument):
+    code: str  # e.g., 'products.create'
     module: str  # products, inventory, sales, etc.
     action: str  # view, create, edit, delete, approve, export
     name: str  # Display name
@@ -14,8 +14,9 @@ class Permission(Document):
     is_system: bool = False
     is_active: bool = True
 
-    class Settings:
-        name = "permissions"
+    class SheetSettings:
+        tab_name = "_permissions"
+        unique_fields = ["code"]
 
 
 class EmbeddedParentRole(BaseModel):
@@ -29,9 +30,9 @@ class DashboardConfig(BaseModel):
     default_page: str = "/dashboard"
 
 
-class Role(Document):
-    name: Indexed(str, unique=True)
-    slug: Indexed(str, unique=True)
+class Role(SheetDocument):
+    name: str
+    slug: str
     description: Optional[str] = None
 
     # Permissions
@@ -56,8 +57,9 @@ class Role(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "roles"
+    class SheetSettings:
+        tab_name = "_roles"
+        unique_fields = ["name", "slug"]
 
     def has_permission(self, permission_code: str) -> bool:
         return permission_code in self.permission_codes

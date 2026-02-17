@@ -1,9 +1,9 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
-from bson import ObjectId
+import uuid
 
 
 class TransferStatus(str, Enum):
@@ -15,7 +15,7 @@ class TransferStatus(str, Enum):
 
 
 class TransferItem(BaseModel):
-    id: str = Field(default_factory=lambda: str(ObjectId()))
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     product: dict  # {id, style_number, name}
     variant: dict  # {id, sku, color, size}
     requested_quantity: int
@@ -24,8 +24,8 @@ class TransferItem(BaseModel):
     notes: Optional[str] = None
 
 
-class StockTransfer(Document):
-    transfer_number: Indexed(str, unique=True)  # TRF-2024-0001
+class StockTransfer(SheetDocument):
+    transfer_number: str  # TRF-2024-0001
 
     from_warehouse: dict  # {id, code, name}
     to_warehouse: dict  # {id, code, name}
@@ -45,5 +45,6 @@ class StockTransfer(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "stock_transfers"
+    class SheetSettings:
+        tab_name = "_transfers"
+        unique_fields = ["transfer_number"]

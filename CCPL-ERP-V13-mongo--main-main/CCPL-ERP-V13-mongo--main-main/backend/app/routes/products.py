@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Depends, Query
 from typing import Optional, List
 from pydantic import BaseModel
 from datetime import datetime
-from bson import ObjectId
+import uuid
 from ..models.product import Product, ProductVariant
 from ..models.user import User
 from ..core.dependencies import get_current_active_user, require_permissions
@@ -107,7 +107,7 @@ async def create_product(
     for v in data.variants:
         sku = f"{data.style_number}-{v.color_code}-{v.size_name}"
         variant = ProductVariant(
-            id=str(ObjectId()),
+            id=uuid.uuid4().hex,
             sku=sku,
             color={"name": v.color_name, "code": v.color_code, "hex": v.color_hex},
             size={"name": v.size_name, "type": v.size_type},

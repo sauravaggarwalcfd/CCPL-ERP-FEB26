@@ -3,7 +3,7 @@ File Master Model
 Stores metadata for uploaded files (images, documents, etc.)
 """
 
-from beanie import Document
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
@@ -20,7 +20,7 @@ class FileCategory(str, Enum):
     OTHER = "other"
 
 
-class FileMaster(Document):
+class FileMaster(SheetDocument):
     """File Master collection model for storing file metadata"""
 
     # Unique file identifier (FILE-YYYYMMDD-XXXX format)
@@ -62,15 +62,9 @@ class FileMaster(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "file_master"
-        indexes = [
-            "file_id",
-            "file_name",
-            "category",
-            "upload_date",
-            "is_deleted",
-        ]
+    class SheetSettings:
+        tab_name = "_file_master"
+        unique_fields = ["file_id"]
 
     class Config:
         json_schema_extra = {

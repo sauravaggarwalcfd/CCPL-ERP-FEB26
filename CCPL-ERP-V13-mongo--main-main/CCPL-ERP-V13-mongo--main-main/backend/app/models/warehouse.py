@@ -1,8 +1,8 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
-from bson import ObjectId
+import uuid
 
 
 class Address(BaseModel):
@@ -21,7 +21,7 @@ class Contact(BaseModel):
 
 
 class WarehouseLocation(BaseModel):
-    id: str = Field(default_factory=lambda: str(ObjectId()))
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     code: str  # A-01-01 (Aisle-Rack-Shelf)
     name: Optional[str] = None
     type: str = "shelf"  # shelf, bin, floor, staging
@@ -29,8 +29,8 @@ class WarehouseLocation(BaseModel):
     is_active: bool = True
 
 
-class Warehouse(Document):
-    code: Indexed(str, unique=True)  # WH-MUM-01
+class Warehouse(SheetDocument):
+    code: str  # WH-MUM-01
     name: str
     address: Address = Address()
     contact: Contact = Contact()
@@ -40,5 +40,6 @@ class Warehouse(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "warehouses"
+    class SheetSettings:
+        tab_name = "_warehouses"
+        unique_fields = ["code"]

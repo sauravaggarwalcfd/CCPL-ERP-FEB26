@@ -6,7 +6,7 @@ Complete PO management with calculations, workflow, and integrations
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from typing import Optional, List
 from datetime import datetime, date, timedelta
-from bson import ObjectId
+import uuid
 import logging
 
 from ..models.purchase_order import (

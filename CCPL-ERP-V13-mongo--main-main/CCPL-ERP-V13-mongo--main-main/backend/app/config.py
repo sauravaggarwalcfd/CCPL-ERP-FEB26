@@ -43,6 +43,14 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     MAX_FILE_SIZE: int = 5 * 1024 * 1024  # 5MB
 
+    # Google Sheets Database (replaces MongoDB)
+    ERP_SPREADSHEET_ID: str = ""
+    ERP_CREDENTIALS_PATH: str = "credentials.json"
+
+    # BOM Module - Google Sheets (uses same sheet)
+    BOM_SPREADSHEET_ID: str = ""
+    BOM_GOOGLE_CREDENTIALS_PATH: str = "credentials.json"
+
     class Config:
         env_file = ".env"
 

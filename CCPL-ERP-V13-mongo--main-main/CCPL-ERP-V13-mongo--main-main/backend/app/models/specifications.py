@@ -3,7 +3,7 @@ Specifications Models
 Manages category-specific specifications configuration and item specification values
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from datetime import datetime
@@ -72,9 +72,9 @@ class SpecificationsConfig(BaseModel):
 
 # ==================== DATABASE MODELS ====================
 
-class CategorySpecifications(Document):
+class CategorySpecifications(SheetDocument):
     """Category specifications configuration document"""
-    category_code: Indexed(str, unique=True)
+    category_code: str
     category_name: str
     category_level: int = 1  # L1, L2, L3, etc.
 
@@ -91,18 +91,14 @@ class CategorySpecifications(Document):
     last_modified_by: Optional[str] = None
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "category_specifications"
-        indexes = [
-            "category_code",
-            "category_level",
-            "is_active"
-        ]
+    class SheetSettings:
+        tab_name = "_category_specs"
+        unique_fields = ["category_code"]
 
 
-class ItemSpecifications(Document):
+class ItemSpecifications(SheetDocument):
     """Item specifications values document"""
-    item_code: Indexed(str, unique=True)
+    item_code: str
     category_code: str
 
     # Standard variant values
@@ -118,16 +114,9 @@ class ItemSpecifications(Document):
     created_date: datetime = Field(default_factory=datetime.utcnow)
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "item_specifications"
-        indexes = [
-            "item_code",
-            "category_code",
-            "colour_code",
-            "size_code",
-            "uom_code",
-            "vendor_code"
-        ]
+    class SheetSettings:
+        tab_name = "_item_specs"
+        unique_fields = ["item_code"]
 
 
 # ==================== REQUEST SCHEMAS ====================

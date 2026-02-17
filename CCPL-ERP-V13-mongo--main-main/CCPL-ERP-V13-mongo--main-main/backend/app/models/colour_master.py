@@ -3,7 +3,7 @@ Colour Master Model
 Manages colour variants with grouping system
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from datetime import datetime
@@ -26,9 +26,9 @@ class RGBValue(BaseModel):
     b: int = Field(..., ge=0, le=255)
 
 
-class ColourMaster(Document):
+class ColourMaster(SheetDocument):
     """Colour Master Document"""
-    colour_code: Indexed(str, unique=True)
+    colour_code: str
     colour_name: str
     colour_hex: str  # #RRGGBB format
     rgb_value: RGBValue
@@ -44,14 +44,9 @@ class ColourMaster(Document):
     last_modified_by: Optional[str] = None
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "colour_master"
-        indexes = [
-            "colour_code",
-            "colour_group",
-            "is_active",
-            "display_order"
-        ]
+    class SheetSettings:
+        tab_name = "_colour_master"
+        unique_fields = ["colour_code"]
 
 
 # ==================== REQUEST SCHEMAS ====================

@@ -3,12 +3,11 @@ Purchase Order Models
 Complete PO system with multi-line items, calculations, and workflow
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime, date
 from enum import Enum
-from bson import ObjectId
 
 
 class POStatus(str, Enum):
@@ -156,11 +155,11 @@ class POTracking(BaseModel):
 
 # ==================== MAIN DOCUMENT ====================
 
-class PurchaseOrder(Document):
+class PurchaseOrder(SheetDocument):
     """Purchase Order Document"""
 
     # Header
-    po_number: Indexed(str, unique=True)
+    po_number: str
     po_version: int = 1
     po_date: date
     po_status: POStatus = POStatus.DRAFT
@@ -202,15 +201,9 @@ class PurchaseOrder(Document):
     is_active: bool = True
     is_deleted: bool = False
 
-    class Settings:
-        name = "purchase_orders"
-        indexes = [
-            "po_number",
-            "po_status",
-            "supplier.code",
-            "po_date",
-            "indent_number"
-        ]
+    class SheetSettings:
+        tab_name = "_purchase_orders"
+        unique_fields = ["po_number"]
 
 
 # ==================== REQUEST/RESPONSE SCHEMAS ====================

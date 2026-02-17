@@ -3,7 +3,7 @@ Size Master Model
 Manages size variants with grouping system
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from datetime import datetime
@@ -18,9 +18,9 @@ class SizeGroup(str, Enum):
     CUSTOM_SIZES = "CUSTOM_SIZES"
 
 
-class SizeMaster(Document):
+class SizeMaster(SheetDocument):
     """Size Master Document"""
-    size_code: Indexed(str, unique=True)
+    size_code: str
     size_name: str
     size_group: str  # Changed from Enum to str
     group_name: str  # Display name
@@ -36,14 +36,9 @@ class SizeMaster(Document):
     last_modified_by: Optional[str] = None
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "size_master"
-        indexes = [
-            "size_code",
-            "size_group",
-            "is_active",
-            "display_order"
-        ]
+    class SheetSettings:
+        tab_name = "_size_master"
+        unique_fields = ["size_code"]
 
 
 # ==================== REQUEST SCHEMAS ====================

@@ -4,7 +4,7 @@ Note: The 5-level hierarchy (ItemCategory, ItemSubCategory, ItemDivision, ItemCl
 is now in category_hierarchy.py
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
@@ -18,17 +18,17 @@ class InventoryType(str, Enum):
 
 
 # ==================== ITEM MASTER ====================
-class ItemMaster(Document):
+class ItemMaster(SheetDocument):
     """
     Item Master Document
     References the 5-level hierarchy from category_hierarchy.py
     """
-    item_code: Indexed(str, unique=True)  # TSHRT-M-BLUE-001
+    item_code: str  # TSHRT-M-BLUE-001
     item_name: str  # Men's Basic Crew Neck T-Shirt - Blue (Medium)
     item_description: Optional[str] = None
-    
+
     # 5-Level Hierarchy Links
-    category_code: Indexed(str)  # Level 1 - e.g., CLOTH
+    category_code: str  # Level 1 - e.g., CLOTH
     category_name: str  # Clothing - Denormalized
     
     sub_category_code: Optional[str] = None  # Level 2 - e.g., MEN
@@ -115,17 +115,9 @@ class ItemMaster(Document):
     updated_by: Optional[str] = None
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
-    class Settings:
-        name = "item_master"
-        indexes = [
-            "item_code",
-            "category_code",
-            "sub_category_code",
-            "division_code",
-            "class_code",
-            "sub_class_code",
-            "barcode",
-        ]
+    class SheetSettings:
+        tab_name = "_item_master"
+        unique_fields = ["item_code"]
 
 
 # ==================== REQUEST/RESPONSE SCHEMAS ====================

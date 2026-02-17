@@ -21,6 +21,7 @@ import BrandMaster from './pages/Masters/BrandMaster'
 import SupplierMaster from './pages/Masters/SupplierMaster'
 import FileManager from './pages/FileManager'
 import WorkInProgress from './components/common/WorkInProgress'
+import { BOMEditor, BOMViewer, BOMPool, BOMAllocator, DyeingPlans } from './pages/bom'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -126,6 +127,33 @@ function App() {
               </ProtectedRoute>
             } />
             
+            {/* Dyeing BOM */}
+            <Route path="/bom/editor" element={
+              <ProtectedRoute>
+                <BOMEditor />
+              </ProtectedRoute>
+            } />
+            <Route path="/bom/view/:uid" element={
+              <ProtectedRoute>
+                <BOMViewer />
+              </ProtectedRoute>
+            } />
+            <Route path="/bom/pool" element={
+              <ProtectedRoute>
+                <BOMPool />
+              </ProtectedRoute>
+            } />
+            <Route path="/bom/allocate" element={
+              <ProtectedRoute>
+                <BOMAllocator />
+              </ProtectedRoute>
+            } />
+            <Route path="/bom/plans" element={
+              <ProtectedRoute>
+                <DyeingPlans />
+              </ProtectedRoute>
+            } />
+
             {/* Masters - Work in Progress */}
             <Route path="/fabric-category" element={
               <ProtectedRoute>

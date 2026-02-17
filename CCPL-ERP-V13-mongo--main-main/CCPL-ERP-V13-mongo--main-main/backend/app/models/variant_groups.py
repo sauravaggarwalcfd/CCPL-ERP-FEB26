@@ -3,7 +3,7 @@ Variant Groups Model
 Master definitions for variant group categories
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
@@ -17,23 +17,19 @@ class VariantType(str, Enum):
     UOM = "UOM"
 
 
-class VariantGroup(Document):
+class VariantGroup(SheetDocument):
     """Variant Group Definitions"""
-    variant_type: Indexed(str)  # COLOUR, SIZE, UOM
-    group_code: Indexed(str)  # THREAD_COLORS, APPAREL_SIZES, WEIGHT, etc.
+    variant_type: str  # COLOUR, SIZE, UOM
+    group_code: str  # THREAD_COLORS, APPAREL_SIZES, WEIGHT, etc.
     group_name: str  # Display name
     description: Optional[str] = None
     is_active: bool = True
     display_order: int = 0
     created_date: datetime = datetime.utcnow()
 
-    class Settings:
-        name = "variant_groups"
-        indexes = [
-            "variant_type",
-            "group_code",
-            [("variant_type", 1), ("group_code", 1)],  # Compound index
-        ]
+    class SheetSettings:
+        tab_name = "_variant_groups"
+        unique_fields = ["variant_type", "group_code"]
 
 
 # ==================== RESPONSE SCHEMA ====================

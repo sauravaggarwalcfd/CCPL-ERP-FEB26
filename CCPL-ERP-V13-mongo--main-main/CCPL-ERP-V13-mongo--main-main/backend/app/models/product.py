@@ -1,8 +1,8 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
-from bson import ObjectId
+import uuid
 
 
 class EmbeddedCategory(BaseModel):
@@ -39,7 +39,7 @@ class VariantImage(BaseModel):
 
 
 class ProductVariant(BaseModel):
-    id: str = Field(default_factory=lambda: str(ObjectId()))
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     sku: str
     color: Color
     size: Size
@@ -55,8 +55,8 @@ class ProductVariant(BaseModel):
     images: List[VariantImage] = []
 
 
-class Product(Document):
-    style_number: Indexed(str, unique=True)  # CC-TS-001
+class Product(SheetDocument):
+    style_number: str  # CC-TS-001
     name: str
     description: Optional[str] = None
 
@@ -94,13 +94,6 @@ class Product(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "products"
-        indexes = [
-            "style_number",
-            "category.slug",
-            "brand.name",
-            "variants.sku",
-            "variants.barcode",
-            [("name", "text"), ("style_number", "text")],
-        ]
+    class SheetSettings:
+        tab_name = "_products"
+        unique_fields = ["style_number"]

@@ -1,9 +1,9 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
-from bson import ObjectId
+import uuid
 
 
 class AdjustmentType(str, Enum):
@@ -23,7 +23,7 @@ class AdjustmentStatus(str, Enum):
 
 
 class AdjustmentItem(BaseModel):
-    id: str = Field(default_factory=lambda: str(ObjectId()))
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     product: dict  # {id, style_number, name}
     variant: dict  # {id, sku, color, size}
     system_quantity: int
@@ -33,8 +33,8 @@ class AdjustmentItem(BaseModel):
     notes: Optional[str] = None
 
 
-class StockAdjustment(Document):
-    adjustment_number: Indexed(str, unique=True)  # ADJ-2024-0001
+class StockAdjustment(SheetDocument):
+    adjustment_number: str  # ADJ-2024-0001
 
     warehouse: dict  # {id, code, name}
     adjustment_type: AdjustmentType
@@ -51,5 +51,6 @@ class StockAdjustment(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "stock_adjustments"
+    class SheetSettings:
+        tab_name = "_adjustments"
+        unique_fields = ["adjustment_number"]

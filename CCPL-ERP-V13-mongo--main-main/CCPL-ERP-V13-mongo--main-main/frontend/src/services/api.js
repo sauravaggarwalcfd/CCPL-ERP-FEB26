@@ -344,4 +344,34 @@ export const files = {
   }
 }
 
+// Dyeing BOM Module API (Google Sheets-backed)
+export const bomApi = {
+  // Status
+  getStatus: () => api.get('/bom/status'),
+
+  // Master Data
+  loadMasterData: () => api.get('/bom/master-data'),
+  getFabrics: () => api.get('/bom/fabrics'),
+
+  // Articles
+  loadArticleBOM: (sheetName) =>
+    api.get(`/bom/articles/${encodeURIComponent(sheetName)}/bom`),
+  createArticleSheet: (artNo) =>
+    api.post(`/bom/articles?art_no=${encodeURIComponent(artNo)}`),
+
+  // BOM CRUD
+  saveBOM: (payload) => api.post('/bom/', payload),
+  getBOM: (uid) => api.get(`/bom/${encodeURIComponent(uid)}`),
+  listBOMs: (params = {}) => api.get('/bom/list', { params }),
+  importBOMs: () => api.post('/bom/import'),
+
+  // Allocation
+  allocateBOMs: (uids, dplanNo) =>
+    api.post('/bom/allocate', { uids, dplan_no: dplanNo }),
+  unallocateBOMs: (uids) => api.post('/bom/unallocate', uids),
+
+  // Dyeing Plans
+  getPlans: () => api.get('/bom/plans'),
+}
+
 export default api

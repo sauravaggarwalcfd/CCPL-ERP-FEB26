@@ -6,7 +6,7 @@ Table: item_types
 Code Format: 2 characters (e.g., FG, RM, AC, CM, SG)
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
 from datetime import datetime
@@ -24,31 +24,32 @@ class DefaultUOM(str, Enum):
     BOX = "BOX"
 
 
-class ItemType(Document):
+class ItemType(SheetDocument):
     """Item Type Master - 10 types for apparel manufacturing"""
-    
-    type_code: Indexed(str, unique=True)
+
+    type_code: str
     type_name: str
     description: Optional[str] = None
-    
+
     allow_purchase: bool = True
     allow_sale: bool = False
     track_inventory: bool = True
     require_quality_check: bool = False
-    
+
     default_uom: str = "PCS"
     color_code: str = "#6b7280"
     icon: str = "Package"
     sort_order: int = 0
-    
+
     is_active: bool = True
     created_by: Optional[str] = None
     updated_by: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Settings:
-        name = "item_types"
+
+    class SheetSettings:
+        tab_name = "_item_types"
+        unique_fields = ["type_code"]
 
 
 class ItemTypeCreate(BaseModel):

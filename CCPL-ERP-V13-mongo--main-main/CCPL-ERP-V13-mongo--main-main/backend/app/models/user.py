@@ -1,9 +1,8 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
-from bson import ObjectId
 
 
 class UserStatus(str, Enum):
@@ -90,8 +89,8 @@ class InvitationInfo(BaseModel):
 
 
 # Main User Document
-class User(Document):
-    email: Indexed(EmailStr, unique=True)
+class User(SheetDocument):
+    email: str  # EmailStr removed for sheet compat
     password_hash: str
     full_name: str
     phone: Optional[str] = None
@@ -136,9 +135,9 @@ class User(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "users"
-        indexes = ["email", "status", "role.slug", "team_id"]
+    class SheetSettings:
+        tab_name = "_users"
+        unique_fields = ["email"]
 
     def has_permission(self, permission_code: str) -> bool:
         if permission_code in self.denied_permissions:

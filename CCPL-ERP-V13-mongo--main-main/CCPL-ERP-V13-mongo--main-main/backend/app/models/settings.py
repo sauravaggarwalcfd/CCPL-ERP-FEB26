@@ -1,4 +1,4 @@
-from beanie import Document
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
@@ -37,7 +37,7 @@ class Defaults(BaseModel):
     currency: str = "INR"
 
 
-class AppSettings(Document):
+class AppSettings(SheetDocument):
     company: CompanyInfo = CompanyInfo()
     invoice: InvoiceSettings = InvoiceSettings()
     sequences: Sequences = Sequences()
@@ -46,5 +46,6 @@ class AppSettings(Document):
 
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "settings"
+    class SheetSettings:
+        tab_name = "_settings"
+        unique_fields = []

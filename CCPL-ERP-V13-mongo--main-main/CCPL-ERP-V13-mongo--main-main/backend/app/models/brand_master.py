@@ -3,13 +3,13 @@ Brand Master Model
 Stores information about brands used/sold in the business
 """
 
-from beanie import Document
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 from datetime import datetime
 
 
-class BrandMaster(Document):
+class BrandMaster(SheetDocument):
     """Brand Master collection model"""
 
     brand_code: str = Field(..., unique=True, index=True)
@@ -25,13 +25,9 @@ class BrandMaster(Document):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     deleted_at: Optional[datetime] = None
 
-    class Settings:
-        name = "brand_master"
-        indexes = [
-            "brand_code",
-            "brand_name",
-            "is_active",
-        ]
+    class SheetSettings:
+        tab_name = "_brand_master"
+        unique_fields = ["brand_code"]
 
     class Config:
         json_schema_extra = {

@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(git init:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(source:*)",
+      "Bash(pip install:*)",
+      "Bash(python -m uvicorn:*)",
+      "Bash(curl:*)",
+      "Bash(npm run dev:*)",
+      "Bash(venv/Scripts/python.exe -m uvicorn:*)"
     ]
   }
 }

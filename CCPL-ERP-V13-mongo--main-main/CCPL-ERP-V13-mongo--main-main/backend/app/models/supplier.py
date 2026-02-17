@@ -1,4 +1,4 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
@@ -11,8 +11,8 @@ class BankDetails(BaseModel):
     account_type: Optional[str] = None
 
 
-class Supplier(Document):
-    code: Indexed(str, unique=True)  # SUP-001
+class Supplier(SheetDocument):
+    code: str  # SUP-001
     company_name: str
     contact_person: Optional[str] = None
     email: Optional[str] = None
@@ -34,5 +34,6 @@ class Supplier(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "suppliers"
+    class SheetSettings:
+        tab_name = "_suppliers_legacy"
+        unique_fields = ["code"]

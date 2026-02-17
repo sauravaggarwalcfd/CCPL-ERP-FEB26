@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from pathlib import Path
 import logging
-from .database import connect_to_mongo, close_mongo_connection
+from .database import connect_to_sheets, close_sheets_connection
 from .routes import (
     auth,
     users,
@@ -31,9 +31,8 @@ from .routes import (
     specifications,
     brands,
     files,
+    bom,
 )
-from .models.item_type import ItemType
-
 logger = logging.getLogger(__name__)
 
 
@@ -41,17 +40,17 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # Startup
     try:
-        await connect_to_mongo()
-        logger.info("MongoDB connection successful")
+        await connect_to_sheets()
+        logger.info("Google Sheets database connection successful")
     except Exception as e:
-        logger.warning(f"MongoDB connection failed: {str(e)}")
+        logger.warning(f"Sheets database connection failed: {str(e)}")
         logger.warning("App starting with database unavailable - use for testing only")
     yield
     # Shutdown
     try:
-        await close_mongo_connection()
+        await close_sheets_connection()
     except Exception as e:
-        logger.warning(f"Error closing MongoDB connection: {str(e)}")
+        logger.warning(f"Error closing database connection: {str(e)}")
 
 
 app = FastAPI(
@@ -114,6 +113,9 @@ app.include_router(variant_groups.router, prefix="/api", tags=["Variant Groups"]
 # Specifications routes
 app.include_router(specifications.router, prefix="/api", tags=["Specifications"])
 
+# Dyeing BOM Module (Google Sheets-backed)
+app.include_router(bom.router, prefix="/api/bom", tags=["Dyeing BOM"])
+
 # Serve uploaded files statically
 UPLOAD_DIR = Path(__file__).parent.parent / "uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
@@ -128,3 +130,5 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+

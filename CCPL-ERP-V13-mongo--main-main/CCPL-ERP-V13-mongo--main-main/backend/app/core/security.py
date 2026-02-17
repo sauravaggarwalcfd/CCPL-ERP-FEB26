@@ -6,13 +6,11 @@ import re
 import secrets
 from ..config import settings
 
-# CryptContext with both argon2 and bcrypt support (for backwards compatibility)
-# Argon2 is preferred for new passwords, but we can verify bcrypt hashes too
+# CryptContext with bcrypt as primary scheme
 pwd_context = CryptContext(
-    schemes=["argon2", "bcrypt"],
+    schemes=["bcrypt"],
     deprecated="auto",
-    argon2__rounds=12,  # Argon2 configuration
-    bcrypt__rounds=12   # Bcrypt configuration
+    bcrypt__rounds=12
 )
 
 # In-memory token blacklist (use Redis in production)

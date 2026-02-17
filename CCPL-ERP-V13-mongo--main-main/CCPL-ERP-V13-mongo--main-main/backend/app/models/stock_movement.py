@@ -1,4 +1,4 @@
-from beanie import Document
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
@@ -28,7 +28,7 @@ class EmbeddedUser(BaseModel):
     name: str
 
 
-class StockMovement(Document):
+class StockMovement(SheetDocument):
     variant: dict  # {id, sku, product_name, color, size}
     warehouse: dict  # {id, code, name}
 
@@ -44,11 +44,6 @@ class StockMovement(Document):
     created_by: Optional[EmbeddedUser] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "stock_movements"
-        indexes = [
-            [("variant.sku", 1), ("created_at", -1)],
-            "warehouse.id",
-            "movement_type",
-            [("created_at", -1)],
-        ]
+    class SheetSettings:
+        tab_name = "_stock_movements"
+        unique_fields = []

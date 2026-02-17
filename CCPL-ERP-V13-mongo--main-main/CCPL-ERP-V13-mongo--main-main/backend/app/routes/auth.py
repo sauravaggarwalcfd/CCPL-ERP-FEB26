@@ -204,9 +204,9 @@ async def signup(data: SignupRequest, response: Response):
             )
 
         # Create new user with minimal fields
-        from beanie import PydanticObjectId
+        import uuid
         user = User(
-            id=PydanticObjectId(),
+            id=uuid.uuid4().hex,
             full_name=data.full_name,
             email=data.email.lower(),
             password_hash=get_password_hash(data.password),

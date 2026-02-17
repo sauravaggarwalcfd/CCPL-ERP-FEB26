@@ -1,4 +1,4 @@
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
@@ -21,12 +21,12 @@ class CustomerAddress(BaseModel):
     is_default: bool = False
 
 
-class Customer(Document):
+class Customer(SheetDocument):
     code: Optional[str] = None  # CUST-001 (for B2B)
     customer_type: CustomerType = CustomerType.RETAIL
     name: str
     email: Optional[str] = None
-    phone: Indexed(str)
+    phone: str
     alternate_phone: Optional[str] = None
     gst_number: Optional[str] = None
 
@@ -43,6 +43,6 @@ class Customer(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "customers"
-        indexes = ["phone", "email", [("name", "text")]]
+    class SheetSettings:
+        tab_name = "_customers"
+        unique_fields = ["code"]

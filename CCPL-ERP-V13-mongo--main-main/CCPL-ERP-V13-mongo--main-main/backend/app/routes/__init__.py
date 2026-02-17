@@ -15,6 +15,7 @@ from . import master_data
 from . import reports
 from . import item_types
 from . import category_hierarchy
+from . import bom
 
 __all__ = [
     "auth",
@@ -34,4 +35,5 @@ __all__ = [
     "reports",
     "item_types",
     "category_hierarchy",
+    "bom",
 ]

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BarChart3, Package, TrendingUp, ShoppingCart, Users, Truck, GitBranch, Settings, LogOut, ChevronDown, Home, Archive, Boxes, FileText, Lock, Mail, FolderTree } from 'lucide-react'
+import { BarChart3, Package, TrendingUp, ShoppingCart, Users, Truck, GitBranch, Settings, LogOut, ChevronDown, Home, Archive, Boxes, FileText, Lock, Mail, FolderTree, Scissors } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { useState } from 'react'
 
@@ -33,7 +33,17 @@ export default function Sidebar() {
         { to: '/tax-hsn-master', label: 'Tax / HSN Master' },
       ]
     },
-    { 
+    {
+      icon: Scissors,
+      label: 'Dyeing BOM',
+      subItems: [
+        { to: '/bom/editor', label: 'Create / Edit BOM' },
+        { to: '/bom/pool', label: 'BOM Pool' },
+        { to: '/bom/allocate', label: 'Allocate BOMs' },
+        { to: '/bom/plans', label: 'Dyeing Plans' },
+      ]
+    },
+    {
       icon: ShoppingCart,
       label: 'Purchase',
       subItems: [

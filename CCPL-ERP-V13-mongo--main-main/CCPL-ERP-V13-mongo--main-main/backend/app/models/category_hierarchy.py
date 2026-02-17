@@ -9,7 +9,7 @@ Level 4: Class (TSHT, SHRT, JEAN)
 Level 5: Sub-Class (RNCK, VNCK, POLO)
 """
 
-from beanie import Document, Indexed
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
 from datetime import datetime
@@ -23,10 +23,10 @@ class CategoryStatus(str, Enum):
 
 # ==================== LEVEL 1: CATEGORY ====================
 
-class ItemCategory(Document):
+class ItemCategory(SheetDocument):
     """Level 1: Category - Broadest classification"""
 
-    category_code: Indexed(str, unique=True)    # 2-4 chars: APRL
+    category_code: str    # 2-4 chars: APRL
     category_name: str
     description: Optional[str] = None
 
@@ -62,81 +62,83 @@ class ItemCategory(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "item_categories"
+    class SheetSettings:
+        tab_name = "_categories"
+        unique_fields = ["category_code"]
 
 
 # ==================== LEVEL 2: SUB-CATEGORY ====================
 
-class ItemSubCategory(Document):
+class ItemSubCategory(SheetDocument):
     """Level 2: Sub-Category - e.g., Men, Women, Kids"""
 
-    sub_category_code: Indexed(str, unique=True)    # 2-4 chars: MENS
+    sub_category_code: str    # 2-4 chars: MENS
     sub_category_name: str
     description: Optional[str] = None
-    
+
     # Parent Reference
-    category_code: Indexed(str)
+    category_code: str
     category_name: str
-    
+
     path: str = ""    # APRL/MENS
     path_name: str = ""  # Apparel > Men
-    
+
     # Item Type
     item_type: str = "FG"
-    
+
     has_color: Optional[bool] = None
     has_size: Optional[bool] = None
     has_fabric: Optional[bool] = None
-    
+
     icon: str = "Users"
     color_code: str = "#3b82f6"
     sort_order: int = 0
-    
+
     status: CategoryStatus = CategoryStatus.ACTIVE
     is_active: bool = True
     is_deleted: bool = False
     deleted_at: Optional[datetime] = None
     child_count: int = 0
-    
+
     created_by: Optional[str] = None
     updated_by: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Settings:
-        name = "item_sub_categories"
+
+    class SheetSettings:
+        tab_name = "_sub_categories"
+        unique_fields = ["sub_category_code"]
 
 
 # ==================== LEVEL 3: DIVISION ====================
 
-class ItemDivision(Document):
+class ItemDivision(SheetDocument):
     """Level 3: Division - e.g., Topwear, Bottomwear"""
 
-    division_code: Indexed(str, unique=True)    # 2-4 chars: TOPW
+    division_code: str    # 2-4 chars: TOPW
     division_name: str
     description: Optional[str] = None
-    
+
     # Parent References
-    category_code: Indexed(str)
+    category_code: str
     category_name: str
-    sub_category_code: Indexed(str)
+    sub_category_code: str
     sub_category_name: str
-    
+
     path: str = ""    # APRL/MENS/TOPW
     path_name: str = ""  # Apparel > Men > Topwear
-    
+
     # Item Type
     item_type: str = "FG"
-    
+
     has_color: Optional[bool] = None
     has_size: Optional[bool] = None
     has_fabric: Optional[bool] = None
-    
+
     icon: str = "Layers"
     color_code: str = "#8b5cf6"
     sort_order: int = 0
-    
+
     status: CategoryStatus = CategoryStatus.ACTIVE
     is_active: bool = True
     is_deleted: bool = False
@@ -148,78 +150,80 @@ class ItemDivision(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "item_divisions"
+    class SheetSettings:
+        tab_name = "_divisions"
+        unique_fields = ["division_code"]
 
 
 # ==================== LEVEL 4: CLASS ====================
 
-class ItemClass(Document):
+class ItemClass(SheetDocument):
     """Level 4: Class - e.g., T-Shirts, Shirts, Jeans"""
 
-    class_code: Indexed(str, unique=True)    # 2-4 chars: TSHT
+    class_code: str    # 2-4 chars: TSHT
     class_name: str
     description: Optional[str] = None
-    
+
     # Parent References
-    category_code: Indexed(str)
+    category_code: str
     category_name: str
-    sub_category_code: Indexed(str)
+    sub_category_code: str
     sub_category_name: str
-    division_code: Indexed(str)
+    division_code: str
     division_name: str
-    
+
     path: str = ""    # APRL/MENS/TOPW/TSHT
     path_name: str = ""  # Apparel > Men > Topwear > T-Shirts
-    
+
     # Item Type
     item_type: str = "FG"
-    
+
     has_color: Optional[bool] = None
     has_size: Optional[bool] = None
     has_fabric: Optional[bool] = None
-    
+
     hsn_code: Optional[str] = None
     gst_rate: Optional[float] = None
-    
+
     icon: str = "Tag"
     color_code: str = "#ec4899"
     sort_order: int = 0
-    
+
     status: CategoryStatus = CategoryStatus.ACTIVE
     is_active: bool = True
     is_deleted: bool = False
     deleted_at: Optional[datetime] = None
     child_count: int = 0
-    
+
     created_by: Optional[str] = None
     updated_by: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Settings:
-        name = "item_classes"
+
+    class SheetSettings:
+        tab_name = "_classes"
+        unique_fields = ["class_code"]
 
 
 # ==================== LEVEL 5: SUB-CLASS ====================
 
-class ItemSubClass(Document):
+class ItemSubClass(SheetDocument):
     """Level 5: Sub-Class - e.g., Round Neck, V-Neck, Polo"""
 
-    sub_class_code: Indexed(str, unique=True)    # 2-4 chars: RNCK
+    sub_class_code: str    # 2-4 chars: RNCK
     sub_class_name: str
     description: Optional[str] = None
-    
+
     # Parent References (Full hierarchy)
-    category_code: Indexed(str)
+    category_code: str
     category_name: str
-    sub_category_code: Indexed(str)
+    sub_category_code: str
     sub_category_name: str
-    division_code: Indexed(str)
+    division_code: str
     division_name: str
-    class_code: Indexed(str)
+    class_code: str
     class_name: str
-    
+
     path: str = ""    # APRL/MENS/TOPW/TSHT/RNCK
     path_name: str = ""  # Apparel > Men > Topwear > T-Shirts > Round Neck
 
@@ -236,24 +240,25 @@ class ItemSubClass(Document):
 
     hsn_code: Optional[str] = None
     gst_rate: Optional[float] = None
-    
+
     icon: str = "Hash"
     color_code: str = "#f59e0b"
     sort_order: int = 0
-    
+
     status: CategoryStatus = CategoryStatus.ACTIVE
     is_active: bool = True
     is_deleted: bool = False
     deleted_at: Optional[datetime] = None
     item_count: int = 0
-    
+
     created_by: Optional[str] = None
     updated_by: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Settings:
-        name = "item_sub_classes"
+
+    class SheetSettings:
+        tab_name = "_sub_classes"
+        unique_fields = ["sub_class_code"]
 
 
 # ==================== REQUEST SCHEMAS ====================

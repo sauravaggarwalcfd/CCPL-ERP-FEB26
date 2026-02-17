@@ -1,4 +1,4 @@
-from beanie import Document
+from .sheet_document import SheetDocument
 from pydantic import BaseModel, Field
 from typing import Optional, List, Any
 from datetime import datetime
@@ -45,7 +45,7 @@ class AuditContext(BaseModel):
     browser: Optional[str] = None
 
 
-class AuditLog(Document):
+class AuditLog(SheetDocument):
     user: AuditUser
     action: AuditAction
     module: str
@@ -56,11 +56,6 @@ class AuditLog(Document):
     error_message: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class Settings:
-        name = "audit_logs"
-        indexes = [
-            [("user.id", 1), ("created_at", -1)],
-            [("action", 1), ("created_at", -1)],
-            [("module", 1), ("created_at", -1)],
-            [("created_at", -1)],
-        ]
+    class SheetSettings:
+        tab_name = "_audit_log"
+        unique_fields = []
