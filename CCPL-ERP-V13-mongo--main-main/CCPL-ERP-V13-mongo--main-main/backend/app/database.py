@@ -1,4 +1,5 @@
 """Database layer — Google Sheets backed (replaces MongoDB/Beanie)."""
+import time
 import logging
 from .config import settings
 from .services.sheets_db_service import SheetsDBService, get_sheets_db, init_sheets_db
@@ -137,10 +138,16 @@ async def connect_to_sheets():
             logger.error(f"Demo seed error: {e}")
         return
 
-    # Ensure all tabs exist with proper headers
+    # Ensure all tabs exist with proper headers (pace to avoid rate limits)
+    tabs_created = 0
     for tab_name, headers in TAB_SCHEMAS.items():
         try:
             db.ensure_tab(tab_name, headers)
+            tabs_created += 1
+            # Pace writes: pause every 10 tabs to stay under 60 writes/min
+            if tabs_created % 10 == 0:
+                logger.info(f"  Created {tabs_created} tabs, pausing to avoid rate limit...")
+                time.sleep(15)
         except Exception as e:
             logger.error(f"Failed to ensure tab {tab_name}: {e}")
 

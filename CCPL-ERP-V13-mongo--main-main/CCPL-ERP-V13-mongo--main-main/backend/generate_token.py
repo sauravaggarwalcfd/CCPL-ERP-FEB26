@@ -6,7 +6,7 @@ import json
 import os
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-CREDENTIALS_PATH = r"D:/CCPL ERP FEB26/client_secret_812520010098-nhsm408ui647ausblpam44tlpe5cpio2.apps.googleusercontent.com.json"
+CREDENTIALS_PATH = r"D:/CCPL ERP FEB26/client_secret_812520010098-5ohcvg27oso85d3b4u4t3mtbr6ml2gtd.apps.googleusercontent.com.json"
 TOKEN_PATH = os.path.join(os.path.dirname(CREDENTIALS_PATH), 'token.json')
 
 def main():

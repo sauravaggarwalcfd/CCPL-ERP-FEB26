@@ -9,6 +9,7 @@ __pycache__/
 # Environment files (contain secrets)
 .env
 client_secret_*.json
+token.json
 chat.md
 
 # OS files

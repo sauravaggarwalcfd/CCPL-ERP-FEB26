@@ -4,6 +4,7 @@ Uses in-memory cache for reads, write-through for mutations.
 import os
 import re
 import json
+import time
 import uuid
 import logging
 from datetime import datetime
@@ -30,6 +31,20 @@ except ImportError:
     OAUTH_FLOW_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
+
+
+def _retry_on_rate_limit(func, max_retries=3):
+    """Execute a Google API call with retry on 429 rate limit errors."""
+    for attempt in range(max_retries + 1):
+        try:
+            return func()
+        except HttpError as e:
+            if e.resp.status == 429 and attempt < max_retries:
+                wait = 10 * (attempt + 1)  # 10s, 20s, 30s
+                logger.warning(f"Rate limit hit, waiting {wait}s (attempt {attempt + 1}/{max_retries})")
+                time.sleep(wait)
+            else:
+                raise
 
 
 class SheetsDBService:
@@ -212,10 +227,10 @@ class SheetsDBService:
 
         try:
             # Try to create the sheet tab
-            self._sheets().batchUpdate(
+            _retry_on_rate_limit(lambda: self._sheets().batchUpdate(
                 spreadsheetId=self.spreadsheet_id,
                 body={'requests': [{'addSheet': {'properties': {'title': tab_name}}}]}
-            ).execute()
+            ).execute())
             logger.info(f"Created sheet tab: {tab_name}")
         except HttpError as e:
             if 'already exists' not in str(e):
@@ -224,12 +239,12 @@ class SheetsDBService:
 
         # Write headers to row 1
         try:
-            self._sheets().values().update(
+            _retry_on_rate_limit(lambda: self._sheets().values().update(
                 spreadsheetId=self.spreadsheet_id,
                 range=f"'{tab_name}'!A1",
                 valueInputOption='RAW',
                 body={'values': [headers]}
-            ).execute()
+            ).execute())
         except Exception as e:
             logger.warning(f"Could not write headers for {tab_name}: {e}")
 
@@ -289,13 +304,13 @@ class SheetsDBService:
             if headers:
                 values = [str(row_data.get(h, '')) for h in headers]
                 try:
-                    self._sheets().values().append(
+                    _retry_on_rate_limit(lambda: self._sheets().values().append(
                         spreadsheetId=self.spreadsheet_id,
                         range=f"'{tab_name}'!A:A",
                         valueInputOption='RAW',
                         insertDataOption='INSERT_ROWS',
                         body={'values': [values]}
-                    ).execute()
+                    ).execute())
                 except Exception as e:
                     logger.error(f"Sheet write error ({tab_name}): {e}")
 
@@ -326,13 +341,13 @@ class SheetsDBService:
 
         if not self.demo_mode and sheet_rows:
             try:
-                self._sheets().values().append(
+                _retry_on_rate_limit(lambda: self._sheets().values().append(
                     spreadsheetId=self.spreadsheet_id,
                     range=f"'{tab_name}'!A:A",
                     valueInputOption='RAW',
                     insertDataOption='INSERT_ROWS',
                     body={'values': sheet_rows}
-                ).execute()
+                ).execute())
             except Exception as e:
                 logger.error(f"Sheet batch write error ({tab_name}): {e}")
 
@@ -355,12 +370,12 @@ class SheetsDBService:
                 if headers:
                     values = [str(row_data.get(h, '')) for h in headers]
                     try:
-                        self._sheets().values().update(
+                        _retry_on_rate_limit(lambda: self._sheets().values().update(
                             spreadsheetId=self.spreadsheet_id,
                             range=f"'{tab_name}'!A{row_num}",
                             valueInputOption='RAW',
                             body={'values': [values]}
-                        ).execute()
+                        ).execute())
                     except Exception as e:
                         logger.error(f"Sheet update error ({tab_name}): {e}")
 
@@ -377,12 +392,12 @@ class SheetsDBService:
                 if headers:
                     empty = [''] * len(headers)
                     try:
-                        self._sheets().values().update(
+                        _retry_on_rate_limit(lambda: self._sheets().values().update(
                             spreadsheetId=self.spreadsheet_id,
                             range=f"'{tab_name}'!A{row_num}",
                             valueInputOption='RAW',
                             body={'values': [empty]}
-                        ).execute()
+                        ).execute())
                     except Exception as e:
                         logger.error(f"Sheet delete error ({tab_name}): {e}")
 
