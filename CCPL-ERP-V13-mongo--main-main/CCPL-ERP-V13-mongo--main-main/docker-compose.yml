@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      MONGODB_URL: mongodb+srv://tech_db_user:Tech3112@cluster0.empai1t.mongodb.net/?appName=Cluster0
+      DATABASE_NAME: inventory_erp
+      SECRET_KEY: your-super-secret-key-change-in-production
+    networks:
+      - inventory-net
+    command: bash -c "python init_db.py && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      VITE_API_URL: https://ominous-enigma-jjv4wpjw767w3xvp-8000.app.github.dev/api
+    networks:
+      - inventory-net
+    command: npm run dev -- --host
+
+networks:
+  inventory-net:
+    driver: bridge

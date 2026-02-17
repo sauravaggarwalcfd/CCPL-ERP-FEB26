@@ -1,0 +1,90 @@
+INFO:     127.0.0.1:64044 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64057 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64341 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64341 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64341 - "OPTIONS /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "OPTIONS /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "OPTIONS /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "OPTIONS /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64338 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64371 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64371 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64371 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64371 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64371 - "OPTIONS /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64374 - "OPTIONS /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64371 - "OPTIONS /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64374 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64371 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64374 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64371 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64386 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64384 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64421 - "OPTIONS /api/items/categories HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64422 - "OPTIONS /api/items/categories HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64421 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64422 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64438 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64440 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64498 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64499 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64503 - "OPTIONS /api/items/items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64502 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64504 - "OPTIONS /api/items/items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64503 - "GET /api/items/items HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64505 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64504 - "GET /api/items/items HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64512 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64513 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64578 - "OPTIONS /api/items/categories HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64579 - "OPTIONS /api/items/categories HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64579 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64580 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64581 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64584 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64586 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64610 - "OPTIONS /api/items/categories HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64610 - "POST /api/items/categories HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:64661 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64661 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64661 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64663 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64663 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64663 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64661 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64663 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64661 - "GET /api/reports/sales/summary?start_date=2025-11-14&end_date=2025-12-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64663 - "GET /api/reports/stock/current?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64611 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64673 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64681 - "POST /api/items/categories HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:64719 - "GET /api/items/categories HTTP/1.1" 500 Internal Server Error

@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Python virtual environment
+venv/
+__pycache__/
+*.pyc
+
+# Environment files (contain secrets)
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+build/
