@@ -11,13 +11,23 @@ from typing import Dict, List, Optional, Any, Callable
 
 from ..config import settings
 
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+
 try:
     from google.oauth2 import service_account
+    from google.oauth2.credentials import Credentials as OAuthCredentials
+    from google.auth.transport.requests import Request
     from googleapiclient.discovery import build
     from googleapiclient.errors import HttpError
     GOOGLE_AVAILABLE = True
 except ImportError:
     GOOGLE_AVAILABLE = False
+
+try:
+    from google_auth_oauthlib.flow import InstalledAppFlow
+    OAUTH_FLOW_AVAILABLE = True
+except ImportError:
+    OAUTH_FLOW_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +41,7 @@ class SheetsDBService:
         self.service = None
         self.demo_mode = False
         self.error_message = None
+        self._api_key_mode = False  # True = read-only via API key
 
         # In-memory cache: tab_name -> list of row dicts
         self._cache: Dict[str, List[Dict[str, Any]]] = {}
@@ -40,7 +51,10 @@ class SheetsDBService:
         self._row_map: Dict[str, Dict[str, int]] = {}
 
     def _init_google(self):
-        """Initialize Google Sheets API connection."""
+        """Initialize Google Sheets API connection.
+        Priority: saved token > service account > API key.
+        Skips interactive OAuth flows during server startup.
+        """
         if not self.spreadsheet_id:
             self.demo_mode = True
             self.error_message = "Spreadsheet ID not configured."
@@ -51,21 +65,70 @@ class SheetsDBService:
             self.error_message = "Google API libraries not installed."
             return
 
-        if not os.path.exists(self.credentials_path):
-            self.demo_mode = True
-            self.error_message = f"credentials.json not found at '{self.credentials_path}'."
-            return
+        # Resolve paths relative to backend directory
+        cred_path = self.credentials_path
+        if not os.path.isabs(cred_path):
+            cred_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), cred_path)
 
-        try:
-            creds = service_account.Credentials.from_service_account_file(
-                self.credentials_path,
-                scopes=['https://www.googleapis.com/auth/spreadsheets']
-            )
-            self.service = build('sheets', 'v4', credentials=creds)
-            logger.info("Google Sheets API initialized successfully")
-        except Exception as e:
-            self.demo_mode = True
-            self.error_message = f"Failed to initialize Google Sheets: {e}"
+        token_path = os.path.join(os.path.dirname(cred_path), 'token.json')
+        api_key = getattr(settings, 'GOOGLE_API_KEY', '') or ''
+
+        creds = None
+
+        # 1. Try loading saved OAuth2 token
+        if os.path.exists(token_path):
+            try:
+                creds = OAuthCredentials.from_authorized_user_file(token_path, SCOPES)
+                logger.info("Loaded saved OAuth2 token")
+                if creds.expired and creds.refresh_token:
+                    try:
+                        creds.refresh(Request())
+                        with open(token_path, 'w') as f:
+                            f.write(creds.to_json())
+                        logger.info("Refreshed OAuth2 token")
+                    except Exception as e:
+                        logger.warning(f"Token refresh failed: {e}")
+                        creds = None
+            except Exception as e:
+                logger.warning(f"Failed to load saved token: {e}")
+                creds = None
+
+        # 2. Try service account key (non-interactive)
+        if not creds or not creds.valid:
+            if os.path.exists(cred_path):
+                try:
+                    with open(cred_path, 'r') as f:
+                        cred_data = json.load(f)
+                    if cred_data.get('type') == 'service_account':
+                        creds = service_account.Credentials.from_service_account_file(
+                            cred_path, scopes=SCOPES
+                        )
+                        logger.info("Using service account credentials")
+                except Exception as e:
+                    logger.warning(f"Service account auth failed: {e}")
+
+        # 3. Use OAuth/service account creds if available
+        if creds and (not hasattr(creds, 'valid') or creds.valid):
+            try:
+                self.service = build('sheets', 'v4', credentials=creds)
+                logger.info("Google Sheets API initialized with full read/write access")
+                return
+            except Exception as e:
+                logger.warning(f"Failed to build service with credentials: {e}")
+
+        # 4. Use API key
+        if api_key:
+            try:
+                self.service = build('sheets', 'v4', developerKey=api_key)
+                self._api_key_mode = True
+                logger.info("Google Sheets API initialized with API key")
+                return
+            except Exception as e:
+                logger.warning(f"API key init failed: {e}")
+
+        # 5. Nothing worked
+        self.demo_mode = True
+        self.error_message = "No valid Google credentials found. Set GOOGLE_API_KEY in .env or provide a service account key."
 
     def _sheets(self):
         """Get spreadsheets API resource."""
@@ -160,12 +223,15 @@ class SheetsDBService:
             # Tab exists but wasn't loaded (maybe empty)
 
         # Write headers to row 1
-        self._sheets().values().update(
-            spreadsheetId=self.spreadsheet_id,
-            range=f"'{tab_name}'!A1",
-            valueInputOption='RAW',
-            body={'values': [headers]}
-        ).execute()
+        try:
+            self._sheets().values().update(
+                spreadsheetId=self.spreadsheet_id,
+                range=f"'{tab_name}'!A1",
+                valueInputOption='RAW',
+                body={'values': [headers]}
+            ).execute()
+        except Exception as e:
+            logger.warning(f"Could not write headers for {tab_name}: {e}")
 
         self._headers[tab_name] = headers
         if tab_name not in self._cache:

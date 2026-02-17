@@ -8,7 +8,18 @@
       "Bash(python -m uvicorn:*)",
       "Bash(curl:*)",
       "Bash(npm run dev:*)",
-      "Bash(venv/Scripts/python.exe -m uvicorn:*)"
+      "Bash(venv/Scripts/python.exe -m uvicorn:*)",
+      "Bash(taskkill:*)",
+      "Bash(tasklist:*)",
+      "Bash(\"d:/CCPL ERP FEB26/CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/backend/venv_win/Scripts/python.exe\" -m uvicorn:*)",
+      "Bash(netstat:*)",
+      "Bash(\"d:/CCPL ERP FEB26/CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/backend/venv_win/Scripts/pip.exe\" show bcrypt passlib)",
+      "Bash(\"d:/CCPL ERP FEB26/CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/backend/venv_win/Scripts/pip.exe\" install \"bcrypt==4.0.1\")",
+      "Bash(\"d:/CCPL ERP FEB26/CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/backend/venv_win/Scripts/python.exe\":*)",
+      "Bash(git push:*)",
+      "Bash(git reset:*)",
+      "Bash(git rm:*)",
+      "Bash(git add:*)"
     ]
   }
 }

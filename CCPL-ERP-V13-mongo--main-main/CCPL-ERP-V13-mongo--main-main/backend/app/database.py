@@ -115,7 +115,13 @@ TAB_SCHEMAS = {
 
 async def connect_to_sheets():
     """Initialize Google Sheets database — called on app startup."""
-    db = await init_sheets_db()
+    try:
+        db = await init_sheets_db()
+    except Exception as e:
+        logger.error(f"Sheets init failed, falling back to demo mode: {e}")
+        db = get_sheets_db()
+        db.demo_mode = True
+        db.error_message = str(e)
 
     if db.demo_mode:
         logger.warning("Running in DEMO MODE — no Google Sheets connection")

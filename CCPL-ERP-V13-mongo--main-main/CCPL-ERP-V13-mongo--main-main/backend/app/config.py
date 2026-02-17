@@ -46,6 +46,7 @@ class Settings(BaseSettings):
     # Google Sheets Database (replaces MongoDB)
     ERP_SPREADSHEET_ID: str = ""
     ERP_CREDENTIALS_PATH: str = "credentials.json"
+    GOOGLE_API_KEY: str = ""
 
     # BOM Module - Google Sheets (uses same sheet)
     BOM_SPREADSHEET_ID: str = ""

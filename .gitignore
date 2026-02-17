@@ -8,6 +8,8 @@ __pycache__/
 
 # Environment files (contain secrets)
 .env
+client_secret_*.json
+chat.md
 
 # OS files
 .DS_Store
