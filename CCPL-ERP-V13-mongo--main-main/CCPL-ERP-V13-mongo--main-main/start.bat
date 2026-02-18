@@ -17,8 +17,11 @@ if not exist "%VENV_DIR%" (
     python -m venv "%VENV_DIR%"
 )
 
-echo     Installing/updating packages from requirements.txt...
-"%PIP%" install -r "%BACKEND_DIR%\requirements.txt"
+echo     Upgrading pip and build tools...
+"%PIP%" install --upgrade pip setuptools wheel --quiet
+
+echo     Installing packages (prefer pre-built binaries)...
+"%PIP%" install --prefer-binary -r "%BACKEND_DIR%\requirements.txt"
 if errorlevel 1 (
     echo.
     echo  ERROR: pip install failed! See errors above.
