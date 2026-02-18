@@ -10,6 +10,13 @@ set "VENV_DIR=%BACKEND_DIR%\venv_win"
 set "PIP=%VENV_DIR%\Scripts\pip.exe"
 set "PYTHON=%VENV_DIR%\Scripts\python.exe"
 
+echo Syncing latest code from GitHub...
+cd /d "%ROOT%"
+git fetch origin main --quiet
+git reset --hard origin/main --quiet
+echo Done.
+echo.
+
 echo.
 echo [1/3] Setting up Python environment...
 
