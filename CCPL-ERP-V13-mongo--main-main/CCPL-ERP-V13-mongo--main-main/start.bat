@@ -17,7 +17,7 @@ set "FRONTEND_DIR=%ROOT%\frontend"
 set "VENV_DIR=%BACKEND_DIR%\venv_win"
 
 REM ===================================================
-REM  STEP 1 - Sync latest code from GitHub (force overwrite local)
+REM  STEP 1 - Sync latest code from GitHub
 REM ===================================================
 echo [1/4] Syncing latest code from GitHub...
 cd /d "%ROOT%"
@@ -25,6 +25,11 @@ git fetch origin main
 git reset --hard origin/main
 echo  Code is now up to date with GitHub.
 echo.
+
+REM Re-apply paths after reset (file may have been overwritten)
+set "BACKEND_DIR=%ROOT%\backend"
+set "FRONTEND_DIR=%ROOT%\frontend"
+set "VENV_DIR=%BACKEND_DIR%\venv_win"
 
 REM ===================================================
 REM  STEP 2 - Backend setup
@@ -59,11 +64,23 @@ if not exist "%FRONTEND_DIR%\node_modules" (
 start "CCPL-Frontend" cmd /k "title CCPL Frontend & cd /d "%FRONTEND_DIR%" & npm run dev -- --strictPort"
 
 REM ===================================================
-REM  Open browser after servers boot
+REM  Wait until port 8085 is actually listening, then open browser
 REM ===================================================
 echo.
-echo  Waiting 8 seconds for servers to start...
-timeout /t 8 /nobreak >nul
+echo  Waiting for frontend to be ready (checking port 8085)...
+set /a TRIES=0
+
+:POLL_LOOP
+timeout /t 2 /nobreak >nul
+set /a TRIES+=1
+powershell -NoProfile -Command "try { $t = New-Object System.Net.Sockets.TcpClient('localhost',8085); $t.Close(); exit 0 } catch { exit 1 }" >nul 2>&1
+if not errorlevel 1 goto BROWSER_OPEN
+if %TRIES% GEQ 30 goto BROWSER_OPEN
+echo  Still starting... (%TRIES%/30)
+goto POLL_LOOP
+
+:BROWSER_OPEN
+echo  Frontend is ready! Opening browser...
 start "" "http://localhost:8085"
 
 echo.
@@ -73,9 +90,7 @@ echo.
 echo    App       :  http://localhost:8085
 echo    API Docs  :  http://localhost:8000/docs
 echo.
-echo    To STOP: run stop.bat  (or close the two
-echo             CMD windows named CCPL-Backend
-echo             and CCPL-Frontend)
+echo    To STOP: run stop.bat
 echo  ============================================
 echo.
 pause
