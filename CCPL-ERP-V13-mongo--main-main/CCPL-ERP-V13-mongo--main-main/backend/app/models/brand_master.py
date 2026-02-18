@@ -25,8 +25,8 @@ class BrandMaster(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     deleted_at: Optional[datetime] = None
 
-    class SheetSettings:
-        tab_name = "_brand_master"
+    class Settings:
+        name = "_brand_master"
         unique_fields = ["brand_code"]
 
     class Config:

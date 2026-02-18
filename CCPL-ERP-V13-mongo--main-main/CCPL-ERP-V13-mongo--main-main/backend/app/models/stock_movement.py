@@ -44,6 +44,6 @@ class StockMovement(SheetDocument):
     created_by: Optional[EmbeddedUser] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_stock_movements"
+    class Settings:
+        name = "_stock_movements"
         unique_fields = []

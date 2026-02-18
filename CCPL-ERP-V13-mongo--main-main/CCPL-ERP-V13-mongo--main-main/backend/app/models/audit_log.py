@@ -56,6 +56,6 @@ class AuditLog(SheetDocument):
     error_message: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_audit_log"
+    class Settings:
+        name = "_audit_log"
         unique_fields = []

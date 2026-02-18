@@ -23,12 +23,8 @@ import FileManager from './pages/FileManager'
 import WorkInProgress from './components/common/WorkInProgress'
 import { BOMEditor, BOMViewer, BOMPool, BOMAllocator, DyeingPlans } from './pages/bom'
 
+// AUTH DISABLED - bypass login for now
 function ProtectedRoute({ children }) {
-  const { user, loading } = useAuth()
-  
-  if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>
-  if (!user) return <Navigate to="/login" />
-  
   return children
 }
 
@@ -38,7 +34,7 @@ function App() {
       <LayoutProvider>
         <BrowserRouter>
           <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
           
           <Route element={<MainLayout />}>
             <Route path="/" element={

@@ -40,6 +40,6 @@ class Warehouse(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_warehouses"
+    class Settings:
+        name = "_warehouses"
         unique_fields = ["code"]

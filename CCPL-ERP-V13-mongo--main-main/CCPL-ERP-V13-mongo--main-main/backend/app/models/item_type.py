@@ -47,8 +47,8 @@ class ItemType(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_item_types"
+    class Settings:
+        name = "_item_types"
         unique_fields = ["type_code"]
 
 

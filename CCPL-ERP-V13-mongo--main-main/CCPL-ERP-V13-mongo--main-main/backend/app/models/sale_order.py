@@ -78,6 +78,6 @@ class SaleOrder(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_sale_orders"
+    class Settings:
+        name = "_sale_orders"
         unique_fields = ["order_number"]

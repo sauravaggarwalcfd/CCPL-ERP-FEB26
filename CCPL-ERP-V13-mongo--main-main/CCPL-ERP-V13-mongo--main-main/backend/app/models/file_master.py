@@ -62,8 +62,8 @@ class FileMaster(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_file_master"
+    class Settings:
+        name = "_file_master"
         unique_fields = ["file_id"]
 
     class Config:

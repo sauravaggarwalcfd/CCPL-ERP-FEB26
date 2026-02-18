@@ -38,8 +38,8 @@ class UOMMaster(SheetDocument):
     last_modified_by: Optional[str] = None
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_uom_master"
+    class Settings:
+        name = "_uom_master"
         unique_fields = ["uom_code"]
 
 

@@ -27,8 +27,8 @@ class VariantGroup(SheetDocument):
     display_order: int = 0
     created_date: datetime = datetime.utcnow()
 
-    class SheetSettings:
-        tab_name = "_variant_groups"
+    class Settings:
+        name = "_variant_groups"
         unique_fields = ["variant_type", "group_code"]
 
 

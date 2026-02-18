@@ -51,6 +51,6 @@ class StockAdjustment(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_adjustments"
+    class Settings:
+        name = "_adjustments"
         unique_fields = ["adjustment_number"]

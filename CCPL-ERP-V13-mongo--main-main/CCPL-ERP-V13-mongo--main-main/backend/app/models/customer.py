@@ -43,6 +43,6 @@ class Customer(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_customers"
+    class Settings:
+        name = "_customers"
         unique_fields = ["code"]

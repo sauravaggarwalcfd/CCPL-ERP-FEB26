@@ -30,8 +30,8 @@ class SupplierMaster(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     deleted_at: Optional[datetime] = None
 
-    class SheetSettings:
-        tab_name = "_supplier_master"
+    class Settings:
+        name = "_supplier_master"
         unique_fields = ["supplier_code"]
 
     class Config:

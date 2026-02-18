@@ -94,6 +94,6 @@ class Product(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_products"
+    class Settings:
+        name = "_products"
         unique_fields = ["style_number"]

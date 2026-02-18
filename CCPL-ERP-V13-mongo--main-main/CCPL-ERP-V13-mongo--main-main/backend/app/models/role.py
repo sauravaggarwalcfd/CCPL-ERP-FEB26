@@ -14,8 +14,8 @@ class Permission(SheetDocument):
     is_system: bool = False
     is_active: bool = True
 
-    class SheetSettings:
-        tab_name = "_permissions"
+    class Settings:
+        name = "_permissions"
         unique_fields = ["code"]
 
 
@@ -57,8 +57,8 @@ class Role(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_roles"
+    class Settings:
+        name = "_roles"
         unique_fields = ["name", "slug"]
 
     def has_permission(self, permission_code: str) -> bool:

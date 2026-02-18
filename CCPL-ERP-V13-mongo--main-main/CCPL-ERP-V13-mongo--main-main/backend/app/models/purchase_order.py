@@ -201,8 +201,8 @@ class PurchaseOrder(SheetDocument):
     is_active: bool = True
     is_deleted: bool = False
 
-    class SheetSettings:
-        tab_name = "_purchase_orders"
+    class Settings:
+        name = "_purchase_orders"
         unique_fields = ["po_number"]
 
 

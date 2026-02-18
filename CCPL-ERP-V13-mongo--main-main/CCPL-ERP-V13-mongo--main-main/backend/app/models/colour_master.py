@@ -44,8 +44,8 @@ class ColourMaster(SheetDocument):
     last_modified_by: Optional[str] = None
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_colour_master"
+    class Settings:
+        name = "_colour_master"
         unique_fields = ["colour_code"]
 
 

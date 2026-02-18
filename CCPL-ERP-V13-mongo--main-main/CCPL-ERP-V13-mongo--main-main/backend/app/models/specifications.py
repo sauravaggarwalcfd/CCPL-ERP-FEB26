@@ -91,8 +91,8 @@ class CategorySpecifications(SheetDocument):
     last_modified_by: Optional[str] = None
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_category_specs"
+    class Settings:
+        name = "_category_specs"
         unique_fields = ["category_code"]
 
 
@@ -114,8 +114,8 @@ class ItemSpecifications(SheetDocument):
     created_date: datetime = Field(default_factory=datetime.utcnow)
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_item_specs"
+    class Settings:
+        name = "_item_specs"
         unique_fields = ["item_code"]
 
 

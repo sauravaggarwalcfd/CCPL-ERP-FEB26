@@ -49,6 +49,6 @@ class Inventory(SheetDocument):
     def available_quantity(self) -> int:
         return self.quantity - self.reserved_quantity
 
-    class SheetSettings:
-        tab_name = "_inventory"
+    class Settings:
+        name = "_inventory"
         unique_fields = []

@@ -115,8 +115,8 @@ class ItemMaster(SheetDocument):
     updated_by: Optional[str] = None
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
-    class SheetSettings:
-        tab_name = "_item_master"
+    class Settings:
+        name = "_item_master"
         unique_fields = ["item_code"]
 
 

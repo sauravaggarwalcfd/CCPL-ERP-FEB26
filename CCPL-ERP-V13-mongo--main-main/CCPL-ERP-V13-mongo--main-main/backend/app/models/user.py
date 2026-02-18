@@ -135,8 +135,8 @@ class User(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-    class SheetSettings:
-        tab_name = "_users"
+    class Settings:
+        name = "_users"
         unique_fields = ["email"]
 
     def has_permission(self, permission_code: str) -> bool:
