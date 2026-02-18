@@ -1,17 +1,20 @@
 from datetime import datetime, timedelta
 from typing import Optional, Any
 from jose import jwt, JWTError
-from passlib.context import CryptContext
+import bcrypt as _bcrypt
 import re
 import secrets
 from ..config import settings
 
-# CryptContext with bcrypt as primary scheme
-pwd_context = CryptContext(
-    schemes=["bcrypt"],
-    deprecated="auto",
-    bcrypt__rounds=12
-)
+# Use bcrypt directly (passlib incompatible with bcrypt >= 4.x)
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    try:
+        return _bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+    except Exception:
+        return False
+
+def get_password_hash(password: str) -> str:
+    return _bcrypt.hashpw(password.encode('utf-8'), _bcrypt.gensalt(12)).decode('utf-8')
 
 # In-memory token blacklist (use Redis in production)
 _token_blacklist = set()
@@ -33,18 +36,6 @@ def validate_password_strength(password: str) -> tuple[bool, str]:
     
     return True, "Password is valid"
 
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a plain password against its hash."""
-    try:
-        return pwd_context.verify(plain_password, hashed_password)
-    except Exception:
-        return False
-
-
-def get_password_hash(password: str) -> str:
-    """Hash a password securely."""
-    return pwd_context.hash(password)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:

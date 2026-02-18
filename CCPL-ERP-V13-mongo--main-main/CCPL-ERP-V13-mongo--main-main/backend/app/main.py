@@ -60,19 +60,16 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS - Allow both localhost and Codespaces URLs
+# CORS - Allow localhost and all Codespaces URLs
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5174",
         "http://localhost:3000",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:5174",
-        "http://127.0.0.1:3000",
-        "https://ominous-enigma-jjv4wpjw767w3xvp-5173.app.github.dev",
-        "https://ominous-enigma-jjv4wpjw767w3xvp-8000.app.github.dev",
+        "http://localhost:5173",
+        "http://localhost:8085",
+        "http://127.0.0.1:8085",
     ],
+    allow_origin_regex=r"https://.*\.app\.github\.dev",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

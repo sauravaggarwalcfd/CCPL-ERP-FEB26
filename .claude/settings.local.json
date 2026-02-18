@@ -29,7 +29,8 @@
       "Bash(pkill:*)",
       "Bash(python3:*)",
       "Bash(git fetch:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(pip show:*)"
     ]
   }
 }
