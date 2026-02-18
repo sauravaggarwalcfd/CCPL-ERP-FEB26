@@ -10,14 +10,18 @@ set "VENV_DIR=%BACKEND_DIR%\venv_win"
 set "PIP=%VENV_DIR%\Scripts\pip.exe"
 set "PYTHON=%VENV_DIR%\Scripts\python.exe"
 
+echo.
 echo Syncing latest code from GitHub...
 cd /d "%ROOT%"
-git fetch origin main --quiet
-git reset --hard origin/main --quiet
-echo Done.
+git fetch origin main
+if errorlevel 1 (
+    echo  [WARN] git fetch failed - check internet or git installation.
+    echo  Continuing with existing local code...
+) else (
+    git reset --hard origin/main
+)
 echo.
 
-echo.
 echo [1/3] Setting up Python environment...
 
 if not exist "%VENV_DIR%" (
@@ -37,22 +41,13 @@ if not exist "%VENV_DIR%" (
 echo     Upgrading pip...
 "%PIP%" install --upgrade pip setuptools wheel --quiet
 
-echo     Installing core packages...
+echo     Installing packages...
 "%PIP%" install --prefer-binary -r "%BACKEND_DIR%\requirements.txt"
 if errorlevel 1 (
     echo.
-    echo  ERROR: Core package install failed! See errors above.
+    echo  ERROR: Package install failed! See errors above.
     pause
     exit /b 1
-)
-
-echo     Installing Pillow (image library)...
-"%PIP%" install --prefer-binary "Pillow>=10.4.0" >nul 2>&1
-if errorlevel 1 (
-    echo     [SKIP] Pillow has no wheel for this Python version - image uploads disabled.
-    echo     To enable: install Python 3.12 from https://www.python.org/downloads/
-) else (
-    echo     Pillow installed OK.
 )
 
 echo.
