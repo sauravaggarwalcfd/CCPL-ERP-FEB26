@@ -2,8 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext'
 import { LayoutProvider } from './context/LayoutContext'
-import { useAuth } from './hooks/useAuth'
+import ProtectedRoute from './components/ProtectedRoute'
 import MainLayout from './components/layout/MainLayout'
+
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import ProductsList from './pages/products/ProductsList'
@@ -23,18 +24,13 @@ import FileManager from './pages/FileManager'
 import WorkInProgress from './components/common/WorkInProgress'
 import { BOMEditor, BOMViewer, BOMPool, BOMAllocator, DyeingPlans } from './pages/bom'
 
-// AUTH DISABLED - bypass login for now
-function ProtectedRoute({ children }) {
-  return children
-}
-
 function App() {
   return (
     <AuthProvider>
       <LayoutProvider>
         <BrowserRouter>
           <Routes>
-          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/login" element={<Login />} />
           
           <Route element={<MainLayout />}>
             <Route path="/" element={
