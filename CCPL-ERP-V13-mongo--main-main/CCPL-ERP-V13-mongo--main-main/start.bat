@@ -34,7 +34,7 @@ echo     Upgrading pip and build tools...
 "%PIP%" install --upgrade pip setuptools wheel --quiet
 
 echo     Installing packages...
-"%PIP%" install --prefer-binary -r "%BACKEND_DIR%\requirements.txt"
+"%PIP%" install --prefer-binary --no-build-isolation -r "%BACKEND_DIR%\requirements.txt"
 if errorlevel 1 (
     echo.
     echo  ERROR: pip install failed!
