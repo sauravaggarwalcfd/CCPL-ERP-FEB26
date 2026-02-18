@@ -11,11 +11,11 @@ set "VENV_DIR=%BACKEND_DIR%\venv_win"
 echo Starting Backend...
 if not exist "%VENV_DIR%" (
     python -m venv "%VENV_DIR%"
-    call "%VENV_DIR%\Scripts\activate.bat"
-    pip install -r "%BACKEND_DIR%\requirements.txt" --quiet
-) else (
-    call "%VENV_DIR%\Scripts\activate.bat"
 )
+call "%VENV_DIR%\Scripts\activate.bat"
+echo Installing/updating Python packages...
+pip install -r "%BACKEND_DIR%\requirements.txt" --quiet
+
 start "CCPL-Backend" cmd /k "title CCPL Backend & cd /d "%BACKEND_DIR%" & call "%VENV_DIR%\Scripts\activate.bat" & python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
 echo Starting Frontend...
