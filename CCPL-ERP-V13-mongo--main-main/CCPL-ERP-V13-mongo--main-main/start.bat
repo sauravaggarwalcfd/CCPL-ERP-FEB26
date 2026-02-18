@@ -10,10 +10,9 @@ REM Get the directory where this bat file lives
 set "PROJECT_DIR=%~dp0"
 
 REM ---- Check token.json exists ----
-if not exist "D:\CCPL ERP FEB26\token.json" (
+if not exist "%PROJECT_DIR%backend\token.json" (
     echo [WARNING] token.json not found!
-    echo Run "python generate_token.py" in backend\ folder first
-    echo to authenticate with Google Sheets.
+    echo Run "python generate_token.py --get-url" in backend\ folder first.
     echo.
     echo The app will start in DEMO MODE (in-memory only, no persistence).
     echo.
@@ -27,6 +26,10 @@ cd /d "%PROJECT_DIR%backend"
 if not exist "venv_win" (
     echo Creating Python virtual environment...
     python -m venv venv_win
+    call venv_win\Scripts\activate.bat
+    pip install -r requirements.txt
+) else (
+    call venv_win\Scripts\activate.bat
 )
 
 start "CCPL-ERP Backend" cmd /k "cd /d "%PROJECT_DIR%backend" && call venv_win\Scripts\activate.bat && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"

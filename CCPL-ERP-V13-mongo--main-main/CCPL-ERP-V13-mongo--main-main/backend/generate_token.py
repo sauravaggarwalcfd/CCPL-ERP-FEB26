@@ -1,39 +1,70 @@
 """One-time script to generate OAuth2 token for Google Sheets access.
-Run this once: python generate_token.py
-It will open a browser for consent and save token.json.
+
+STEP 1: python generate_token.py --get-url
+         -> Prints the Google auth URL. Open it in your browser, allow access.
+         -> After allowing, browser redirects to localhost (shows error - that's OK).
+         -> Copy the 'code=...' value from the URL bar.
+
+STEP 2: python generate_token.py --code=PASTE_CODE_HERE
+         -> Saves token.json. Done!
 """
 import json
 import os
+import sys
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-CREDENTIALS_PATH = r"D:/CCPL ERP FEB26/client_secret_812520010098-5ohcvg27oso85d3b4u4t3mtbr6ml2gtd.apps.googleusercontent.com.json"
-TOKEN_PATH = os.path.join(os.path.dirname(CREDENTIALS_PATH), 'token.json')
+CREDENTIALS_PATH = os.path.join(os.path.dirname(__file__), 'credentials.json')
+TOKEN_PATH = os.path.join(os.path.dirname(__file__), 'token.json')
 
-def main():
+
+def get_flow():
     from google_auth_oauthlib.flow import InstalledAppFlow
-
-    print(f"Reading credentials from: {CREDENTIALS_PATH}")
-
     with open(CREDENTIALS_PATH, 'r') as f:
         cred_data = json.load(f)
-
-    # Convert 'web' to 'installed' for InstalledAppFlow
     if 'web' in cred_data:
         client_config = {'installed': cred_data['web']}
     else:
         client_config = cred_data
+    return InstalledAppFlow.from_client_config(
+        client_config, SCOPES,
+        redirect_uri='http://localhost'
+    )
 
-    print("Opening browser for Google consent...")
-    print("Please sign in and allow access to Google Sheets.")
 
-    flow = InstalledAppFlow.from_client_config(client_config, SCOPES)
-    creds = flow.run_local_server(port=8085)
+def step1_get_url():
+    flow = get_flow()
+    auth_url, _ = flow.authorization_url(prompt='consent', access_type='offline')
+    print("\n" + "="*60)
+    print("STEP 1: Open this URL in your browser:")
+    print("="*60)
+    print(auth_url)
+    print("="*60)
+    print("\nAfter you click Allow, the browser will try to open")
+    print("http://localhost?code=XXXX  (it will show an error - that's OK)")
+    print("\nCopy the full URL from the address bar and run:")
+    print('  python generate_token.py --code=PASTE_THE_CODE_HERE')
+    print("\nThe code= is the long string after 'code=' in the URL.\n")
 
+
+def step2_save_token(code):
+    flow = get_flow()
+    flow.fetch_token(code=code)
+    creds = flow.credentials
     with open(TOKEN_PATH, 'w') as f:
         f.write(creds.to_json())
+    print(f"\ntoken.json saved to: {TOKEN_PATH}")
+    print("Google Sheets is now connected!")
+    print("Start the backend: python -m uvicorn app.main:app --reload")
 
-    print(f"\nToken saved to: {TOKEN_PATH}")
-    print("You can now start the backend with: python -m uvicorn app.main:app --reload")
 
 if __name__ == '__main__':
-    main()
+    args = sys.argv[1:]
+    if not args or '--get-url' in args:
+        step1_get_url()
+    elif any(a.startswith('--code=') for a in args):
+        code = next(a.split('=', 1)[1] for a in args if a.startswith('--code='))
+        step2_save_token(code)
+    else:
+        print("Usage:")
+        print("  python generate_token.py --get-url")
+        print("  python generate_token.py --code=YOUR_AUTH_CODE")

@@ -1,0 +1,22 @@
+{
+  "name": "CCPL ERP",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "forwardPorts": [8000, 8085],
+  "portsAttributes": {
+    "8000": {
+      "label": "Backend API",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    },
+    "8085": {
+      "label": "Frontend",
+      "onAutoForward": "openBrowser",
+      "visibility": "public"
+    }
+  },
+  "postCreateCommand": "pip install -r CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/backend/requirements.txt && cd CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/frontend && npm install",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" },
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.12" }
+  }
+}

@@ -21,7 +21,13 @@
       "Bash(git rm:*)",
       "Bash(git add:*)",
       "Bash(ls:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(python:*)",
+      "Bash(chmod:*)",
+      "Bash(\"/workspaces/CCPL-ERP-FEB26/CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/start.bat\":*)",
+      "Bash(fuser:*)",
+      "Bash(pkill:*)",
+      "Bash(python3:*)"
     ]
   }
 }

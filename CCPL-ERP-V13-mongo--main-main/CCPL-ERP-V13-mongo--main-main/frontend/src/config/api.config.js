@@ -2,7 +2,7 @@
 const getApiUrl = () => {
   // Check if we're in Codespaces
   if (window.location.hostname.includes('app.github.dev')) {
-    const codespaceUrl = window.location.origin.replace('-5173', '-8000')
+    const codespaceUrl = window.location.origin.replace('-8085', '-8000')
     return `${codespaceUrl}/api`
   }
 
