@@ -7,19 +7,33 @@ if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 set "BACKEND_DIR=%ROOT%\backend"
 set "FRONTEND_DIR=%ROOT%\frontend"
 set "VENV_DIR=%BACKEND_DIR%\venv_win"
+set "PIP=%VENV_DIR%\Scripts\pip.exe"
+set "PYTHON=%VENV_DIR%\Scripts\python.exe"
 
-echo Starting Backend...
+echo.
+echo [1/3] Setting up Python environment...
 if not exist "%VENV_DIR%" (
+    echo     Creating virtual environment...
     python -m venv "%VENV_DIR%"
 )
-call "%VENV_DIR%\Scripts\activate.bat"
-echo Installing/updating Python packages...
-pip install -r "%BACKEND_DIR%\requirements.txt" --quiet
 
-start "CCPL-Backend" cmd /k "title CCPL Backend & cd /d "%BACKEND_DIR%" & call "%VENV_DIR%\Scripts\activate.bat" & python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+echo     Installing/updating packages from requirements.txt...
+"%PIP%" install -r "%BACKEND_DIR%\requirements.txt"
+if errorlevel 1 (
+    echo.
+    echo  ERROR: pip install failed! See errors above.
+    pause
+    exit /b 1
+)
 
-echo Starting Frontend...
+echo.
+echo [2/3] Starting Backend on port 8000...
+start "CCPL-Backend" cmd /k "title CCPL Backend & cd /d "%BACKEND_DIR%" & "%PYTHON%" -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+echo.
+echo [3/3] Starting Frontend on port 8085...
 if not exist "%FRONTEND_DIR%\node_modules" (
+    echo     Installing npm packages...
     pushd "%FRONTEND_DIR%"
     call npm install
     popd
