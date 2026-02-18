@@ -33,7 +33,8 @@
       "Bash(pip show:*)",
       "Bash(lsof:*)",
       "Bash(/workspaces/CCPL-ERP-FEB26/CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/backend/app/database.py:*)",
-      "Bash(/workspaces/CCPL-ERP-FEB26/CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/backend/app/models/sheet_document.py:*)"
+      "Bash(/workspaces/CCPL-ERP-FEB26/CCPL-ERP-V13-mongo--main-main/CCPL-ERP-V13-mongo--main-main/backend/app/models/sheet_document.py:*)",
+      "Bash(xargs:*)"
     ]
   }
 }
