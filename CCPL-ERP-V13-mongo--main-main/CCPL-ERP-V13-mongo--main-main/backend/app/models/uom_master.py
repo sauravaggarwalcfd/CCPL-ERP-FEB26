@@ -39,7 +39,7 @@ class UOMMaster(SheetDocument):
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_uom_master"
+        name = "uom_master"
         unique_fields = ["uom_code"]
 
 

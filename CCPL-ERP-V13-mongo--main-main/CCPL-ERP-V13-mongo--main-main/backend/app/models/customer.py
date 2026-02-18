@@ -44,5 +44,5 @@ class Customer(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_customers"
+        name = "customers"
         unique_fields = ["code"]

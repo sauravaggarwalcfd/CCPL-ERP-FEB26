@@ -31,7 +31,7 @@ class SupplierMaster(SheetDocument):
     deleted_at: Optional[datetime] = None
 
     class Settings:
-        name = "_supplier_master"
+        name = "supplier_master"
         unique_fields = ["supplier_code"]
 
     class Config:

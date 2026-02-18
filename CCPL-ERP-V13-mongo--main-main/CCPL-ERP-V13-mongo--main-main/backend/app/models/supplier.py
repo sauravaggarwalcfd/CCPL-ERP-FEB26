@@ -35,5 +35,5 @@ class Supplier(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_suppliers_legacy"
+        name = "suppliers"
         unique_fields = ["code"]

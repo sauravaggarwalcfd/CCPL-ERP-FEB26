@@ -41,5 +41,5 @@ class Warehouse(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_warehouses"
+        name = "warehouses"
         unique_fields = ["code"]

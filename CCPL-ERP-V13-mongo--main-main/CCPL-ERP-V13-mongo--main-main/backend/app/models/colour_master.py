@@ -45,7 +45,7 @@ class ColourMaster(SheetDocument):
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_colour_master"
+        name = "colour_master"
         unique_fields = ["colour_code"]
 
 

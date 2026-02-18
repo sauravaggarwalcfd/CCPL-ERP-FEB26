@@ -45,5 +45,5 @@ class StockMovement(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_stock_movements"
+        name = "stock_movements"
         unique_fields = []

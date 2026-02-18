@@ -16,7 +16,7 @@ class Category(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_md_categories"
+        name = "categories"
         unique_fields = ["slug"]
 
 
@@ -29,7 +29,7 @@ class Brand(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_md_brands"
+        name = "brands"
         unique_fields = ["name"]
 
 
@@ -42,7 +42,7 @@ class Season(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_md_seasons"
+        name = "seasons"
         unique_fields = ["name"]
 
 
@@ -54,7 +54,7 @@ class Color(SheetDocument):
     sort_order: int = 0
 
     class Settings:
-        name = "_md_colors"
+        name = "colors"
         unique_fields = ["code"]
 
 
@@ -65,5 +65,5 @@ class Size(SheetDocument):
     is_active: bool = True
 
     class Settings:
-        name = "_md_sizes"
+        name = "sizes"
         unique_fields = ["name"]

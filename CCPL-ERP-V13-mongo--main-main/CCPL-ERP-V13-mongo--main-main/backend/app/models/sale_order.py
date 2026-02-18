@@ -79,5 +79,5 @@ class SaleOrder(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_sale_orders"
+        name = "sale_orders"
         unique_fields = ["order_number"]

@@ -57,5 +57,5 @@ class AuditLog(SheetDocument):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_audit_log"
+        name = "audit_logs"
         unique_fields = []

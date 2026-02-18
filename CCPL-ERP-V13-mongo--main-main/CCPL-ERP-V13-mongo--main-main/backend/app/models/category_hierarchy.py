@@ -63,7 +63,7 @@ class ItemCategory(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_categories"
+        name = "item_categories"
         unique_fields = ["category_code"]
 
 
@@ -106,7 +106,7 @@ class ItemSubCategory(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_sub_categories"
+        name = "item_sub_categories"
         unique_fields = ["sub_category_code"]
 
 
@@ -151,7 +151,7 @@ class ItemDivision(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_divisions"
+        name = "item_divisions"
         unique_fields = ["division_code"]
 
 
@@ -201,7 +201,7 @@ class ItemClass(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_classes"
+        name = "item_classes"
         unique_fields = ["class_code"]
 
 
@@ -257,7 +257,7 @@ class ItemSubClass(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_sub_classes"
+        name = "item_sub_classes"
         unique_fields = ["sub_class_code"]
 
 

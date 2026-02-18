@@ -95,5 +95,5 @@ class Product(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_products"
+        name = "products"
         unique_fields = ["style_number"]

@@ -202,7 +202,7 @@ class PurchaseOrder(SheetDocument):
     is_deleted: bool = False
 
     class Settings:
-        name = "_purchase_orders"
+        name = "purchase_orders"
         unique_fields = ["po_number"]
 
 

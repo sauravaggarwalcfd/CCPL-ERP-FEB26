@@ -92,7 +92,7 @@ class CategorySpecifications(SheetDocument):
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_category_specs"
+        name = "category_specifications"
         unique_fields = ["category_code"]
 
 
@@ -115,7 +115,7 @@ class ItemSpecifications(SheetDocument):
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_item_specs"
+        name = "item_specifications"
         unique_fields = ["item_code"]
 
 

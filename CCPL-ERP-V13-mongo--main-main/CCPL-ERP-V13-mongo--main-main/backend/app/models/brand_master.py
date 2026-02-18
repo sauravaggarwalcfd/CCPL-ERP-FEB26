@@ -26,7 +26,7 @@ class BrandMaster(SheetDocument):
     deleted_at: Optional[datetime] = None
 
     class Settings:
-        name = "_brand_master"
+        name = "brand_master"
         unique_fields = ["brand_code"]
 
     class Config:

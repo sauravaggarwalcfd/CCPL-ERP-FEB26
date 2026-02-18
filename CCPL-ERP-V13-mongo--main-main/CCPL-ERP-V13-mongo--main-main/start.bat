@@ -1,63 +1,73 @@
 @echo off
 setlocal enabledelayedexpansion
+title CCPL ERP Launcher
 
-echo ========================================
-echo   CCPL Inventory ERP - Google Sheets
-echo ========================================
+echo.
+echo  ============================================
+echo    CCPL Inventory ERP  -  MongoDB Atlas
+echo  ============================================
 echo.
 
-REM Get the directory where this bat file lives
-set "PROJECT_DIR=%~dp0"
+REM ---- Resolve project root (where this .bat lives) ----
+set "ROOT=%~dp0"
+REM Remove trailing backslash
+if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 
-REM ---- Check token.json exists ----
-if not exist "%PROJECT_DIR%backend\token.json" (
-    echo [WARNING] token.json not found!
-    echo Run "python generate_token.py --get-url" in backend\ folder first.
-    echo.
-    echo The app will start in DEMO MODE (in-memory only, no persistence).
-    echo.
-    pause
-)
+set "BACKEND_DIR=%ROOT%\backend"
+set "FRONTEND_DIR=%ROOT%\frontend"
+set "VENV_DIR=%BACKEND_DIR%\venv_win"
 
-REM ---- Start Backend ----
-echo Starting Backend (FastAPI on port 8000)...
-cd /d "%PROJECT_DIR%backend"
+REM ===================================================
+REM  BACKEND
+REM ===================================================
+echo [1/3] Setting up Python backend...
 
-if not exist "venv_win" (
-    echo Creating Python virtual environment...
-    python -m venv venv_win
-    call venv_win\Scripts\activate.bat
-    pip install -r requirements.txt
+if not exist "%VENV_DIR%" (
+    echo      Creating virtual environment (first run)...
+    python -m venv "%VENV_DIR%"
+    call "%VENV_DIR%\Scripts\activate.bat"
+    echo      Installing Python dependencies...
+    pip install -r "%BACKEND_DIR%\requirements.txt" --quiet
 ) else (
-    call venv_win\Scripts\activate.bat
+    call "%VENV_DIR%\Scripts\activate.bat"
 )
 
-start "CCPL-ERP Backend" cmd /k "cd /d "%PROJECT_DIR%backend" && call venv_win\Scripts\activate.bat && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+echo [2/3] Starting Backend on http://localhost:8000 ...
+start "CCPL-Backend" cmd /k "title CCPL Backend & cd /d "%BACKEND_DIR%" & call "%VENV_DIR%\Scripts\activate.bat" & python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
-REM ---- Start Frontend ----
-echo Starting Frontend (Vite on port 8085)...
-cd /d "%PROJECT_DIR%frontend"
+REM ===================================================
+REM  FRONTEND
+REM ===================================================
+echo [3/3] Starting Frontend on http://localhost:8085 ...
 
-if not exist "node_modules" (
-    echo Installing frontend dependencies...
+if not exist "%FRONTEND_DIR%\node_modules" (
+    echo      Installing npm packages (first run)...
+    pushd "%FRONTEND_DIR%"
     call npm install
+    popd
 )
 
-start "CCPL-ERP Frontend" cmd /k "cd /d "%PROJECT_DIR%frontend" && npm run dev"
+start "CCPL-Frontend" cmd /k "title CCPL Frontend & cd /d "%FRONTEND_DIR%" & npm run dev -- --strictPort"
+
+REM ===================================================
+REM  OPEN BROWSER  (wait a few seconds for servers to boot)
+REM ===================================================
+echo.
+echo  Waiting for servers to start...
+timeout /t 6 /nobreak >nul
+start "" "http://localhost:8085"
 
 echo.
-echo ========================================
-echo   Services Starting...
-echo ========================================
+echo  ============================================
+echo    Both services are running!
 echo.
-echo   Backend API:  http://localhost:8000
-echo   API Docs:     http://localhost:8000/docs
-echo   Frontend:     http://localhost:8085
+echo    Frontend  :  http://localhost:8085
+echo    Backend   :  http://localhost:8000
+echo    API Docs  :  http://localhost:8000/docs
 echo.
-echo   Login:  admin@ccpl.com / Admin@123
+echo    Login     :  admin@ccpl.com / Admin@123
 echo.
-echo   Both services run in separate windows.
-echo   Close those windows to stop them.
-echo ========================================
+echo    Close the two CMD windows to stop servers.
+echo  ============================================
 echo.
 pause

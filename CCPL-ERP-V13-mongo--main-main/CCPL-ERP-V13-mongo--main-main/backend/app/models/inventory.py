@@ -50,5 +50,5 @@ class Inventory(SheetDocument):
         return self.quantity - self.reserved_quantity
 
     class Settings:
-        name = "_inventory"
+        name = "inventory_stock"
         unique_fields = []

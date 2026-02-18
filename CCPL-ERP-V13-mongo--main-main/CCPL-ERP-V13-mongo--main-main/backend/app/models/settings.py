@@ -47,5 +47,5 @@ class AppSettings(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_settings"
+        name = "settings"
         unique_fields = []

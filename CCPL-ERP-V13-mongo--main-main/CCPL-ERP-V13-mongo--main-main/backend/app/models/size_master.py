@@ -37,7 +37,7 @@ class SizeMaster(SheetDocument):
     last_modified_date: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_size_master"
+        name = "size_master"
         unique_fields = ["size_code"]
 
 

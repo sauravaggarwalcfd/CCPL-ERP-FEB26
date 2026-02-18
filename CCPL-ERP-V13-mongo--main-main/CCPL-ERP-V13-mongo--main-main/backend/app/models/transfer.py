@@ -46,5 +46,5 @@ class StockTransfer(SheetDocument):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
-        name = "_transfers"
+        name = "stock_transfers"
         unique_fields = ["transfer_number"]
