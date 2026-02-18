@@ -17,14 +17,13 @@ set "FRONTEND_DIR=%ROOT%\frontend"
 set "VENV_DIR=%BACKEND_DIR%\venv_win"
 
 REM ===================================================
-REM  STEP 1 - Pull latest code from GitHub
+REM  STEP 1 - Sync latest code from GitHub (force overwrite local)
 REM ===================================================
-echo [1/4] Pulling latest code from GitHub...
+echo [1/4] Syncing latest code from GitHub...
 cd /d "%ROOT%"
-git pull origin main
-if errorlevel 1 (
-    echo  [WARN] git pull failed - starting with existing code.
-)
+git fetch origin main
+git reset --hard origin/main
+echo  Code is now up to date with GitHub.
 echo.
 
 REM ===================================================
