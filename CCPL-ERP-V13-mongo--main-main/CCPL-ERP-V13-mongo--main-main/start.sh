@@ -1,100 +1,54 @@
 #!/bin/bash
+# CCPL ERP - PM2 Startup Script (Linux / Codespaces)
 
-echo "================================"
-echo "Inventory ERP - Quick Start"
-echo "================================"
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+BACKEND_DIR="$ROOT/backend"
+FRONTEND_DIR="$ROOT/frontend"
+
+echo ""
+echo "  ============================================"
+echo "    CCPL Inventory ERP (PM2)"
+echo "  ============================================"
 echo ""
 
-# Check if Docker is installed
-if command -v docker &> /dev/null; then
-    echo "✓ Docker found"
-    echo ""
-    echo "Starting with Docker Compose (Atlas)..."
-    echo ""
-    
-    # Start services
-    docker-compose up -d
-
-    echo ""
-    echo "Initializing database (creating admin user if not exists)..."
-    sleep 3
-    docker-compose exec -T backend python init_db.py
-
-    echo ""
-    echo "================================"
-    echo "Services Started!"
-    echo "================================"
-    echo ""
-    echo "MongoDB:     Atlas (MONGODB_URL from environment)"
-    echo "Backend API: http://localhost:8000"
-    echo "Frontend:    http://localhost:5173"
-    echo ""
-    echo "API Docs:    http://localhost:8000/docs"
-    echo ""
-    echo "Default Login Credentials:"
-    echo "  Email:    admin@inventoryerp.com"
-    echo "  Password: Admin@123"
-    echo ""
-    echo "View logs:   docker-compose logs -f"
-    echo "Stop:        docker-compose down"
-    echo ""
-else
-    echo "✗ Docker not found. Using manual setup..."
-    echo ""
-    
-    # Backend setup
-    echo "Starting MongoDB..."
-    echo "Make sure MongoDB is running on localhost:27017"
-    echo ""
-    
-    # Backend
-    echo "Setting up Backend..."
-    cd backend
-    
-    if [ ! -d "venv" ]; then
-        echo "Creating Python virtual environment..."
-        python -m venv venv
-    fi
-    
-    # Activate venv
-    if [ -f "venv/bin/activate" ]; then
-        source venv/bin/activate
-    else
-        source venv/Scripts/activate
-    fi
-    
-    echo "Installing backend dependencies..."
-    pip install -r requirements.txt
-    
-    echo "Starting backend server..."
-    uvicorn app.main:app --reload --port 8000 &
-    BACKEND_PID=$!
-    
-    cd ../frontend
-    
-    echo ""
-    echo "Setting up Frontend..."
-    
-    if [ ! -d "node_modules" ]; then
-        echo "Installing frontend dependencies..."
-        npm install
-    fi
-    
-    echo "Starting frontend server..."
-    npm run dev &
-    FRONTEND_PID=$!
-    
-    echo ""
-    echo "================================"
-    echo "Services Started!"
-    echo "================================"
-    echo ""
-    echo "Backend API: http://localhost:8000"
-    echo "Frontend:    http://localhost:5173"
-    echo "API Docs:    http://localhost:8000/docs"
-    echo ""
-    echo "Press Ctrl+C to stop servers"
-    echo ""
-    
-    wait $BACKEND_PID $FRONTEND_PID
+# ===== Check PM2 =====
+if ! command -v pm2 &>/dev/null; then
+    echo "  Installing PM2..."
+    npm install -g pm2
 fi
+
+# ===== Install Python deps if needed =====
+echo "[1/3] Checking Python dependencies..."
+python3 -c "import fastapi" 2>/dev/null || {
+    echo "  Installing Python packages..."
+    pip install -r "$BACKEND_DIR/requirements.txt"
+}
+
+# ===== Install Node deps if needed =====
+echo "[2/3] Checking Node dependencies..."
+if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
+    echo "  Installing npm packages..."
+    cd "$FRONTEND_DIR" && npm install
+fi
+
+# ===== Stop any existing PM2 processes =====
+pm2 delete ccpl-backend ccpl-frontend 2>/dev/null
+
+# ===== Start with PM2 =====
+echo ""
+echo "[3/3] Starting servers with PM2..."
+cd "$ROOT"
+pm2 start ecosystem.config.cjs
+
+echo ""
+echo "  Backend  : http://localhost:8000"
+echo "  Frontend : http://localhost:8085"
+echo ""
+echo "  PM2 Commands:"
+echo "    pm2 status        - Check server status"
+echo "    pm2 logs          - View live logs"
+echo "    pm2 logs ccpl-backend   - Backend logs only"
+echo "    pm2 logs ccpl-frontend  - Frontend logs only"
+echo "    pm2 restart all   - Restart both servers"
+echo "    pm2 stop all      - Stop both servers"
+echo ""
