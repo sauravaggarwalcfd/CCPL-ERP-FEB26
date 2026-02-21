@@ -5,7 +5,7 @@ title CCPL ERP
 REM ============================================================
 REM   CONFIGURATION
 REM ============================================================
-set "REPO_URL=https://github.com/AjayKumarMadaka573/CCPL-ERP-FEB26.git"
+set "REPO_URL=https://github.com/sauravaggarwalcfd/CCPL-ERP-FEB26.git"
 set "BRANCH=main"
 
 REM ===== Detect which system this is =====
@@ -177,7 +177,8 @@ echo.
 echo  Starting servers with PM2...
 pm2 delete ccpl-backend ccpl-frontend >nul 2>&1
 cd /d "%PROJECT_DIR%"
-pm2 start ecosystem.config.cjs
+pm2 start "%PYTHON%" --name ccpl-backend --cwd "%BACKEND_DIR%" -- -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+pm2 start "cmd" --name ccpl-frontend --cwd "%FRONTEND_DIR%" --interpreter none -- /c npm run dev -- --host 0.0.0.0 --port 8085 --strictPort
 
 echo.
 echo  ============================================
@@ -266,7 +267,8 @@ echo.
 echo  Restarting servers...
 pm2 delete ccpl-backend ccpl-frontend >nul 2>&1
 cd /d "%PROJECT_DIR%"
-pm2 start ecosystem.config.cjs
+pm2 start "%PYTHON%" --name ccpl-backend --cwd "%BACKEND_DIR%" -- -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+pm2 start "cmd" --name ccpl-frontend --cwd "%FRONTEND_DIR%" --interpreter none -- /c npm run dev -- --host 0.0.0.0 --port 8085 --strictPort
 
 echo.
 echo  Servers restarted.
